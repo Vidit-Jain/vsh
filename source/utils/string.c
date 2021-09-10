@@ -54,5 +54,4 @@ void emptyString(String *str) {
 	str->str[0] = '\0';
 	str->length = 0;
 }
-
 void updateLength(String *str) { str->length = strlen(str->str); }

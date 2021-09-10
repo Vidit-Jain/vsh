@@ -1,5 +1,6 @@
 #include "prompt.h"
 
 void printPrompt() {
-	printf("<%s@%s:~> ", getUsername()->str, getSystemName()->str);
+    updateDisplayPath();
+	printf("<%s@%s:%s> ", getUsername()->str, getSystemName()->str, displayPath->str);
 }
