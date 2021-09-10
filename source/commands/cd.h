@@ -7,5 +7,5 @@
 #include "../utils/systemInfo.h"
 #include "../utils/tokenArray.h"
 
-void commandCd(TokenArray *tokens);
+void commandCD(TokenArray *tokens);
 #endif // VSH_CD_H

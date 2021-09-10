@@ -7,9 +7,12 @@ void execute(TokenArray *tokens) {
 	if (tokens->argCount == 0)
 		return;
 	if (isCommand(tokens, *initString("cd"))) {
-		commandCd(tokens);
+        commandCD(tokens);
 	}
 	if (isCommand(tokens, *initString("echo"))) {
 		commandEcho(tokens);
 	}
+    if (isCommand(tokens, *initString("pwd"))) {
+        commandPWD(tokens);
+    }
 }
