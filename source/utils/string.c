@@ -52,6 +52,9 @@ String *initString(const char *str) {
 	strcpy(filledString->str, str);
 	filledString->length = stringLength;
 }
+unsigned int isEqualString(String str1, String str2) {
+    return strcmp(str1.str, str2.str) == 0;
+}
 
 void emptyString(String *str) {
 	str->str[0] = '\0';

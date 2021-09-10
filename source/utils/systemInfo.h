@@ -16,5 +16,6 @@ String *getCurrentPath();
 unsigned int getDepth(String path);
 unsigned int inHomeDirectory();
 void updateDisplayPath();
+void goToCurrentPath();
 
 #endif // VSH_SYSTEMINFO_H

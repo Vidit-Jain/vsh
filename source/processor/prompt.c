@@ -2,6 +2,8 @@
 void initInfo() {
     setHomePath();
     getCurrentPath();
+    previousPath = newString();
+    stringCopy(previousPath, *currentPath);
 }
 void printPrompt() {
     updateDisplayPath();

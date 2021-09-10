@@ -1,6 +1,7 @@
 #include "source/processor/prompt.h"
 #include "source/utils/tokenArray.h"
 #include "source/processor/tokenize.h"
+#include "source/processor/execute.h"
 int main() {
     initInfo();
     String *input = newString();
@@ -18,9 +19,10 @@ int main() {
         }
         input->str[input->length] = '\0';
         tokenize(tokens, *input);
-        for (int i = 0; i < tokens->argCount; i++) {
-            printf("\"%s\" ", tokens->args[i]->str);
-        }
-        printf("\n");
+//        for (int i = 0; i < tokens->argCount; i++) {
+//            printf("\"%s\" ", tokens->args[i]->str);
+//        }
+//        printf("\n");
+        execute(tokens);
     }
 }

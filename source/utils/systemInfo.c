@@ -68,3 +68,8 @@ void updateDisplayPath() {
     sprintf(displayPath->str, "~%s", &(currentPath->str[homePath->length]));
     updateLength(displayPath);
 }
+
+void goToCurrentPath() {
+    chdir(currentPath->str);
+    currentPathDepth = getDepth(*currentPath);
+}

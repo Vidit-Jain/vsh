@@ -4,3 +4,4 @@ unsigned int currentPathDepth;
 String* homePath;
 String* currentPath;
 String* displayPath;
+String* previousPath;
