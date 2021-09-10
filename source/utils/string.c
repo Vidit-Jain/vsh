@@ -28,6 +28,9 @@ String *newStringCustom(unsigned int size) {
 }
 
 void stringCopy(String *dest, String src) {
+
+    if (dest == NULL) dest = newString();
+
 	if (src.length >= dest->maxSize)
 		dest->str = (char *)malloc((src.length + 1) * sizeof(char *));
 

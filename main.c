@@ -1,18 +1,26 @@
 #include "source/processor/prompt.h"
+#include "source/utils/tokenArray.h"
+#include "source/processor/tokenize.h"
 int main() {
-    setHomePath();
-    getCurrentPath();
-    printPrompt();
-    chdir("..");
-    chdir("..");
-    currentPathDepth--;
-    currentPathDepth--;
-    getCurrentPath();
-    printPrompt();
+    initInfo();
+    String *input = newString();
+    TokenArray *tokens = newTokenArray();
+    while (1) {
+        printPrompt();
+        input->length = 0;
+        char inputCharacter;
+        while (1) {
+            inputCharacter = (char) getchar();
+            if (inputCharacter == '\n') break;
 
-    chdir("vsh");
-    currentPathDepth++;
-    chdir("cmake-build-debug");
-    getCurrentPath();
-    printPrompt();
+            input->str[input->length] = inputCharacter;
+            input->length++;
+        }
+        input->str[input->length] = '\0';
+        tokenize(tokens, *input);
+        for (int i = 0; i < tokens->argCount; i++) {
+            printf("\"%s\" ", tokens->args[i]->str);
+        }
+        printf("\n");
+    }
 }

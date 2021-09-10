@@ -3,5 +3,6 @@
 #include "../utils/string.h"
 #include "../utils/systemInfo.h"
 #include <stdio.h>
+void initInfo();
 void printPrompt();
 #endif // VSH_PROMPT_H
