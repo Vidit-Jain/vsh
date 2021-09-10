@@ -3,12 +3,12 @@
 #include "string.h"
 typedef struct tokenArray TokenArray;
 struct tokenArray {
-    String** args;
-    unsigned int argCount;
-    unsigned int maxSize;
+	String **args;
+	unsigned int argCount;
+	unsigned int maxSize;
 };
 
 TokenArray *newTokenArray();
 TokenArray *newTokenArrayCustom(unsigned int size);
 
-#endif //VSH_TOKENARRAY_H
+#endif // VSH_TOKENARRAY_H

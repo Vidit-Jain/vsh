@@ -29,7 +29,8 @@ String *newStringCustom(unsigned int size) {
 
 void stringCopy(String *dest, String src) {
 
-    if (dest == NULL) dest = newString();
+	if (dest == NULL)
+		dest = newString();
 
 	if (src.length >= dest->maxSize)
 		dest->str = (char *)malloc((src.length + 1) * sizeof(char *));
@@ -53,7 +54,7 @@ String *initString(const char *str) {
 	filledString->length = stringLength;
 }
 unsigned int isEqualString(String str1, String str2) {
-    return strcmp(str1.str, str2.str) == 0;
+	return strcmp(str1.str, str2.str) == 0;
 }
 
 void emptyString(String *str) {
