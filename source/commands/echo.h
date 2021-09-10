@@ -1,4 +1,5 @@
 #ifndef VSH_ECHO_H
 #define VSH_ECHO_H
-
-#endif //VSH_ECHO_H
+#include "../utils/tokenArray.h"
+void commandEcho(TokenArray *tokens);
+#endif // VSH_ECHO_H

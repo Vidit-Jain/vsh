@@ -8,4 +8,4 @@
 #include "../utils/tokenArray.h"
 
 void commandCd(TokenArray *tokens);
-#endif //VSH_CD_H
+#endif // VSH_CD_H

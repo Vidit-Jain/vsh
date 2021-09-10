@@ -1,6 +1,7 @@
 #ifndef VSH_EXECUTE_H
 #define VSH_EXECUTE_H
 #include "../commands/cd.h"
+#include "../commands/echo.h"
 #include "../utils/tokenArray.h"
 void execute(TokenArray *tokens);
-#endif //VSH_EXECUTE_H
+#endif // VSH_EXECUTE_H
