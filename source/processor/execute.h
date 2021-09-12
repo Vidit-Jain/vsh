@@ -2,6 +2,7 @@
 #define VSH_EXECUTE_H
 #include "../commands/cd.h"
 #include "../commands/echo.h"
+#include "../commands/ls.h"
 #include "../utils/tokenArray.h"
 #include "../commands/pwd.h"
 void execute(TokenArray *tokens);

@@ -15,4 +15,7 @@ void execute(TokenArray *tokens) {
     if (isCommand(tokens, *initString("pwd"))) {
         commandPWD(tokens);
     }
+    if (isCommand(tokens, *initString("ls"))) {
+        commandLS(tokens);
+    }
 }
