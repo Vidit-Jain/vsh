@@ -8,10 +8,10 @@
 #include "../../globals.h"
 #include "string.h"
 
-String *getUsername();
-String *getSystemName();
+void setUsername();
+void setSystemName();
 String *setHomePath();
-String *getCurrentPath();
+String *setCurrentPath();
 unsigned int getDepth(String path);
 unsigned int inHomeDirectory();
 void updateDisplayPath();

@@ -9,4 +9,7 @@ extern String *currentPath;
 
 extern String *displayPath;
 extern String *previousPath;
+
+extern String *username;
+extern String *systemName;
 #endif // VSH_GLOBALS_H

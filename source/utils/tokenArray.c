@@ -1,5 +1,5 @@
 #include "tokenArray.h"
-const unsigned int MAX_ARGS = 200;
+const unsigned int MAX_ARGS = 256;
 TokenArray *newTokenArray() {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
 	tokens->args = (String **)malloc(MAX_ARGS * sizeof(String *));

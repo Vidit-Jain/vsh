@@ -1,5 +1,5 @@
 #include "tokenize.h"
-void tokenize(TokenArray *tokens, String input) {
+void tokenizeCommand(TokenArray *tokens, String input) {
 	char *currentToken;
 	currentToken = strtok(input.str, " \t");
 	tokens->argCount = 0;

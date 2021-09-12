@@ -15,7 +15,7 @@ void changeDirectory(TokenArray *tokens) {
 	} else {
 		stringCopy(previousPath, *currentPath);
 		chdir(tokens->args[1]->str);
-		getCurrentPath();
+        setCurrentPath();
 	}
 }
 void commandCD(TokenArray *tokens) {

@@ -19,3 +19,12 @@ void executeCommand(TokenArray *tokens) {
 		commandLS(tokens);
 	}
 }
+
+void executeLine(TokenArray *tokens, String input) {
+    char* currentCommand;
+    String *parseInput = initString(input.str);
+    while ((currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
+        tokenizeCommand(tokens, *initString(currentCommand));
+        executeCommand(tokens);
+    }
+}

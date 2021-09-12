@@ -1,12 +1,14 @@
 #include "prompt.h"
 void initInfo() {
 	setHomePath();
-	getCurrentPath();
+    setCurrentPath();
 	previousPath = newString();
+    setUsername();
+    setSystemName();
 	stringCopy(previousPath, *currentPath);
 }
 void printPrompt() {
 	updateDisplayPath();
-	printf("<%s@%s:%s> ", getUsername()->str, getSystemName()->str,
-		   displayPath->str);
+	printf("<%s@%s:%s> ", username->str, systemName->str,
+           displayPath->str);
 }

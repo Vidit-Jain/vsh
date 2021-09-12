@@ -1,17 +1,14 @@
 #include "systemInfo.h"
 
-String *getUsername() {
+void setUsername() {
 	struct passwd *pass = getpwuid(getuid());
-	String *username = initString(pass->pw_name);
-	return username;
+	username = initString(pass->pw_name);
 }
 
-String *getSystemName() {
-	String *hostName = newString();
-	gethostname(hostName->str, hostName->maxSize);
-	updateLength(hostName);
-
-	return hostName;
+void setSystemName() {
+	systemName = newString();
+	gethostname(systemName->str, systemName->maxSize);
+	updateLength(systemName);
 }
 
 unsigned int getDepth(String path) {
@@ -35,7 +32,7 @@ String *setHomePath() {
 	}
 }
 
-String *getCurrentPath() {
+String *setCurrentPath() {
 	currentPath = newStringCustom(PATH_MAX);
 	if (getcwd(currentPath->str, currentPath->maxSize) != NULL) {
 		updateLength(currentPath);
