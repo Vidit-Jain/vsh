@@ -5,5 +5,5 @@
 #include "../commands/ls.h"
 #include "../commands/pwd.h"
 #include "../utils/tokenArray.h"
-void execute(TokenArray *tokens);
+void executeCommand(TokenArray *tokens);
 #endif // VSH_EXECUTE_H

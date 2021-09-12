@@ -3,7 +3,7 @@
 unsigned int isCommand(TokenArray *tokens, String str) {
 	return isEqualString(*tokens->args[0], str);
 }
-void execute(TokenArray *tokens) {
+void executeCommand(TokenArray *tokens) {
 	if (tokens->argCount == 0)
 		return;
 	if (isCommand(tokens, *initString("cd"))) {

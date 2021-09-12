@@ -19,11 +19,11 @@ int main() {
 			input->length++;
 		}
 		input->str[input->length] = '\0';
-		tokenize(tokens, *input);
-		//        for (int i = 0; i < tokens->argCount; i++) {
-		//            printf("\"%s\" ", tokens->args[i]->str);
-		//        }
-		//        printf("\n");
-		execute(tokens);
+        char* currentCommand;
+        String *parseInput = initString(input->str);
+        while ((currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
+            tokenize(tokens, *initString(currentCommand));
+            executeCommand(tokens);
+        }
 	}
 }
