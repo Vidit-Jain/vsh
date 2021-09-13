@@ -107,6 +107,7 @@ int checkFlags(TokenArray *tokens) {
 			printf("ls: invalid option -- '%c'\n", optopt);
 			flags = -1;
 			break;
+		default: printf("ls: Unknown error\n"); break;
 		}
 		if (flags == -1)
 			break;
