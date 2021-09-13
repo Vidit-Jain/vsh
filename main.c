@@ -18,6 +18,6 @@ int main() {
 			input->length++;
 		}
 		input->str[input->length] = '\0';
-        executeLine(tokens, *input);
+		executeLine(tokens, *input);
 	}
 }

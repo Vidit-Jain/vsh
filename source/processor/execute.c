@@ -6,25 +6,25 @@ unsigned int isCommand(TokenArray *tokens, String str) {
 void executeCommand(TokenArray *tokens) {
 	if (tokens->argCount == 0)
 		return;
-	if (isCommand(tokens, *initString("cd"))) {
+	else if (isCommand(tokens, *initString("cd"))) {
 		commandCD(tokens);
-	}
-	if (isCommand(tokens, *initString("echo"))) {
+	} else if (isCommand(tokens, *initString("echo"))) {
 		commandEcho(tokens);
-	}
-	if (isCommand(tokens, *initString("pwd"))) {
+	} else if (isCommand(tokens, *initString("pwd"))) {
 		commandPWD(tokens);
-	}
-	if (isCommand(tokens, *initString("ls"))) {
+	} else if (isCommand(tokens, *initString("ls"))) {
 		commandLS(tokens);
+	} else {
+		exec(tokens);
 	}
 }
 
 void executeLine(TokenArray *tokens, String input) {
-    char* currentCommand;
-    String *parseInput = initString(input.str);
-    while ((currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
-        tokenizeCommand(tokens, *initString(currentCommand));
-        executeCommand(tokens);
-    }
+	char *currentCommand;
+	String *parseInput = initString(input.str);
+	while (
+		(currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
+		tokenizeCommand(tokens, *initString(currentCommand));
+		executeCommand(tokens);
+	}
 }

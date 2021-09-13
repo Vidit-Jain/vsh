@@ -5,6 +5,7 @@
 #include "../commands/ls.h"
 #include "../commands/pwd.h"
 #include "../utils/tokenArray.h"
+#include "exec.h"
 #include "tokenize.h"
 void executeCommand(TokenArray *tokens);
 void executeLine(TokenArray *tokens, String input);
