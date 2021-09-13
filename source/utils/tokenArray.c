@@ -11,3 +11,12 @@ TokenArray *newTokenArrayCustom(unsigned int size) {
 	tokens->args = (String **)malloc(size * sizeof(String *));
 	tokens->maxSize = size;
 }
+
+TokenArray *duplicateTokenArray(TokenArray *tokens) {
+    TokenArray *duplicate = newTokenArrayCustom(tokens->maxSize);
+    duplicate->argCount = tokens->argCount;
+    for (int i = 0; i < duplicate->argCount; i++) {
+        duplicate->args[i] = initString(tokens->args[i]->str);
+    }
+    return duplicate;
+}

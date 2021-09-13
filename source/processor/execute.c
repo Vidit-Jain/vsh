@@ -14,7 +14,18 @@ void executeCommand(TokenArray *tokens) {
 		commandPWD(tokens);
 	} else if (isCommand(tokens, *initString("ls"))) {
 		commandLS(tokens);
-	} else {
+	} else if (isCommand(tokens, *initString("repeat"))) {
+        int repeats = commandRepeat(tokens);
+        TokenArray *tokenReduced = newTokenArray();
+        for (int i = 2; i < tokens->argCount; i++) {
+            tokenReduced->args[i - 2] = initString(tokens->args[i]->str);
+        }
+        tokenReduced->argCount = tokens->argCount - 2;
+        for (int i = 0; i < repeats; i++) {
+            TokenArray *tokenCopy = duplicateTokenArray(tokenReduced);
+            executeCommand(tokenCopy);
+        }
+    } else {
 		exec(tokens);
 	}
 }

@@ -10,5 +10,6 @@ struct tokenArray {
 
 TokenArray *newTokenArray();
 TokenArray *newTokenArrayCustom(unsigned int size);
+TokenArray *duplicateTokenArray(TokenArray *tokens);
 
 #endif // VSH_TOKENARRAY_H

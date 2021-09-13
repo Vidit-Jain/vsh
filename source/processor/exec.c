@@ -25,12 +25,11 @@ void exec(TokenArray *tokens) {
 		}
 		execvp(tokens->args[0]->str, args);
 	} else {
-        if (!isBackgroundProcess(tokens)) {
-            int status;
-            wait(&status);
-        }
-        else {
-            printf("%d\n", childId);
-        }
+		if (!isBackgroundProcess(tokens)) {
+			int status;
+			wait(&status);
+		} else {
+			printf("%d\n", childId);
+		}
 	}
 }

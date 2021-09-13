@@ -4,6 +4,7 @@
 #include "../commands/echo.h"
 #include "../commands/ls.h"
 #include "../commands/pwd.h"
+#include "../commands/repeat.h"
 #include "../utils/tokenArray.h"
 #include "exec.h"
 #include "tokenize.h"
