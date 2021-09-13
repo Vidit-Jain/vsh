@@ -18,6 +18,7 @@ String *substring(String str, unsigned int startIndex,
 String *initString(const char *str);
 void emptyString(String *str);
 void updateLength(String *str);
+void concatenate(String* str1, String* str2);
 unsigned int isEqualString(String str1, String str2);
 
 #endif // VSH_STRING_H

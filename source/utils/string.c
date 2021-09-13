@@ -61,4 +61,13 @@ void emptyString(String *str) {
 	str->str[0] = '\0';
 	str->length = 0;
 }
+void concatenate(String* str1, String* str2) {
+    if (str1->length + str2->length + 1 > str1->maxSize) {
+        String* temp = initString(str1->str);
+        str1 = newStringCustom(str1->length + str2->length + 1);
+        stringCopy(str1, *temp);
+    }
+    strcat(str1->str, str2->str);
+    updateLength(str1);
+}
 void updateLength(String *str) { str->length = strlen(str->str); }

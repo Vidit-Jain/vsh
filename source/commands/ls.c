@@ -4,14 +4,39 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <pwd.h>
+#include <grp.h>
+#include <unistd.h>
+#include <time.h>
+
 int folderExists(String path) {
 	struct stat sb;
 	return stat(path.str, &sb) == 0 && S_ISDIR(sb.st_mode);
+}
+String *getUser(uid_t uid) {
+    struct passwd *user;
+    user = getpwuid(uid);
+    return initString(user->pw_name);
+}
+String *getGroup(gid_t gid) {
+    struct group *user;
+    user = getgrgid(gid);
+    return initString(user->gr_name);
+}
+String *lastModified(time_t time) {
+    String *date = newString();
+
+    struct tm t;
+    t = *localtime(&time);
+    strftime(date->str, date->maxSize, "%b %d %H:%M", &t);
+    updateLength(date);
+    return date;
 }
 String *filePermissions(String *filePath) {
 	String *permissions = initString("----------");
 	struct stat fileStat;
 	if (stat(filePath->str, &fileStat) < 0) {
+        printf("File: %s\n", filePath->str);
 		printf("Error: File not found\n");
 		return NULL;
 	}
@@ -29,7 +54,7 @@ String *filePermissions(String *filePath) {
 	}
 	return permissions;
 }
-void listDirectories(String *path, int flags, int displayName) {
+void listDirectories(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
 		printf("%s: No such directory exists\n", path->str);
 		return;
@@ -41,13 +66,95 @@ void listDirectories(String *path, int flags, int displayName) {
 	struct dirent *dir;
 	directory = opendir(path->str);
 	while ((dir = readdir(directory)) != NULL) {
-		if (!strcmp("..", dir->d_name) || !strcmp(".", dir->d_name))
-			continue;
-		if (!(flags & 1) && dir->d_name[0] == '.')
+		if (!showHidden && dir->d_name[0] == '.')
 			continue;
 		printf("%s\n", dir->d_name);
 	}
 	closedir(directory);
+}
+long countBlocks(String* path, int countHidden) {
+    DIR *directory;
+    struct dirent *dir;
+    directory = opendir(path->str);
+    long count = 0;
+    while ((dir = readdir(directory)) != NULL) {
+        if (dir->d_name[0] == '.' && !countHidden) continue;
+        struct stat file;
+        String* temp = newString();
+        stringCopy(temp, *path);
+        concatenate(temp, initString("/"));
+        concatenate(temp, initString(dir->d_name));
+        stat(temp->str, &file);
+        count += file.st_blocks;
+    }
+    return count / 2;
+}
+void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
+    if (!folderExists(*path)) {
+        printf("%s: No such directory exists\n", path->str);
+        return;
+    }
+    if (displayName) {
+        printf("%s:\n", path->str);
+    }
+    DIR *directory;
+    struct dirent *dir;
+    directory = opendir(path->str);
+    long totalBlocks = countBlocks(path, showHidden);
+    printf("total %ld\n", totalBlocks);
+    unsigned int maxLinks = 0, maxUserLength = 0, maxGroupLength = 0, maxByteSize = 0;
+    while ((dir = readdir(directory)) != NULL) {
+        if (!showHidden && dir->d_name[0] == '.')
+            continue;
+        struct stat file;
+        String* temp = newString();
+        stringCopy(temp, *path);
+        concatenate(temp, initString("/"));
+        concatenate(temp, initString(dir->d_name));
+        stat(temp->str, &file);
+        String *userOwner = getUser(file.st_uid);
+        String *groupOwner = getGroup(file.st_gid);
+
+        unsigned byteLength = 0;
+        long x = file.st_size;
+        while (x != 0) {
+            byteLength++;
+            x /= 10;
+        }
+
+        unsigned linkLength = 0;
+        unsigned long y = file.st_nlink;
+        while (y != 0) {
+            linkLength++;
+            y /= 10;
+        }
+
+        maxUserLength = MAX(maxUserLength, userOwner->length);
+        maxGroupLength = MAX(maxGroupLength, groupOwner->length);
+        maxByteSize = MAX(maxByteSize, byteLength);
+        maxLinks = MAX(maxLinks, linkLength);
+    }
+    closedir(directory);
+    char buf[80];
+    sprintf(buf, "%%s %%%uld %%-%us %%-%us %%%uld %%s %%s\n", maxLinks, maxUserLength, maxGroupLength, maxByteSize);
+    directory = opendir(path->str);
+    while ((dir = readdir(directory)) != NULL) {
+        if (!showHidden && dir->d_name[0] == '.')
+            continue;
+        struct stat file;
+        String* temp = newString();
+        stringCopy(temp, *path);
+        concatenate(temp, initString("/"));
+        concatenate(temp, initString(dir->d_name));
+        stat(temp->str, &file);
+        String *userOwner = getUser(file.st_uid);
+        String *groupOwner = getGroup(file.st_gid);
+        String *date = lastModified(file.st_mtim.tv_sec);
+        char *strq = "%s\t%ld\t%s\t%s\t%5ld\t%s\t%s\n";
+//        printf("%s %ld %s %s %ld %s %s\n", filePermissions(temp)->str, file.st_nlink, userOwner->str, groupOwner->str, file.st_size, date->str, dir->d_name);
+        printf(buf, filePermissions(temp)->str, file.st_nlink, userOwner->str, groupOwner->str, file.st_size, date->str, dir->d_name);
+    }
+    closedir(directory);
 }
 int checkFlags(TokenArray *tokens) {
 	char *args[tokens->argCount];
@@ -86,12 +193,14 @@ void commandLS(TokenArray *tokens) {
 	int pathCount = countPaths(tokens);
 
 	if (pathCount == 0) {
-		listDirectories(currentPath, flags, 0);
+        if (flags & 2) listDirectoriesVerbose(currentPath, flags & 1, 0);
+        else listDirectories(currentPath, flags & 1, 0);
 	} else {
 		for (int i = 1; i < tokens->argCount; i++) {
 			if (tokens->args[i]->str[0] == '-')
 				continue;
-			listDirectories(tokens->args[i], flags, (pathCount > 1));
+            if (flags & 2) listDirectoriesVerbose(tokens->args[i], flags & 1, (pathCount > 1));
+            else listDirectories(tokens->args[i], flags & 1, (pathCount > 1));
 		}
 	}
 }
