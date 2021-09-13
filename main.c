@@ -1,6 +1,7 @@
 #include "source/processor/execute.h"
 #include "source/processor/prompt.h"
 #include "source/utils/tokenArray.h"
+#include "source/utils/utils.h"
 int main() {
 	initInfo();
 	String *input = newString();

@@ -1,4 +1,5 @@
 #include "tokenize.h"
+
 void tokenizeCommand(TokenArray *tokens, String input) {
 	char *currentToken;
 	currentToken = strtok(input.str, " \t");

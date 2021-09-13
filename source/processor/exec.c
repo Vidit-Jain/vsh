@@ -1,6 +1,5 @@
 #include "exec.h"
-#include <sys/wait.h>
-#include <unistd.h>
+
 int isBackgroundProcess(TokenArray *tokens) {
 	String *lastToken = tokens->args[tokens->argCount - 1];
 	return lastToken->str[lastToken->length - 1] == '&';

@@ -18,6 +18,7 @@ void changeDirectory(TokenArray *tokens) {
 		setCurrentPath();
 	}
 }
+
 void commandCD(TokenArray *tokens) {
 	if (tokens->argCount > 2) {
 		printf("cd : Incorrect number of arguments\n");

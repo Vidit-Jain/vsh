@@ -1,7 +1,7 @@
 #ifndef VSH_GLOBALS_H
 #define VSH_GLOBALS_H
 #include "source/utils/string.h"
-#define MAX(a,b) ((a > b) ? a : b)
+#define MAX(a, b) ((a > b) ? a : b)
 extern unsigned int homePathDepth;
 extern String *homePath;
 

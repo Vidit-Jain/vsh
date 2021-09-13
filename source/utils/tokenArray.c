@@ -1,5 +1,7 @@
 #include "tokenArray.h"
+
 const unsigned int MAX_ARGS = 256;
+
 TokenArray *newTokenArray() {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
 	tokens->args = (String **)malloc(MAX_ARGS * sizeof(String *));
@@ -13,10 +15,10 @@ TokenArray *newTokenArrayCustom(unsigned int size) {
 }
 
 TokenArray *duplicateTokenArray(TokenArray *tokens) {
-    TokenArray *duplicate = newTokenArrayCustom(tokens->maxSize);
-    duplicate->argCount = tokens->argCount;
-    for (int i = 0; i < duplicate->argCount; i++) {
-        duplicate->args[i] = initString(tokens->args[i]->str);
-    }
-    return duplicate;
+	TokenArray *duplicate = newTokenArrayCustom(tokens->maxSize);
+	duplicate->argCount = tokens->argCount;
+	for (int i = 0; i < duplicate->argCount; i++) {
+		duplicate->args[i] = initString(tokens->args[i]->str);
+	}
+	return duplicate;
 }
