@@ -6,8 +6,8 @@
 #include "systemInfo.h"
 #include "tokenArray.h"
 void initInfo();
-int isNumber(TokenArray *tokens);
-int toNumber(TokenArray *tokens);
+int isNumber(String *number);
+unsigned long toNumber(String *number);
 int folderExists(String path);
 String *getUser(uid_t uid);
 String *getGroup(gid_t gid);

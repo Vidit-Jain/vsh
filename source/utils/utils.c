@@ -9,23 +9,21 @@ void initInfo() {
 	stringCopy(previousPath, *currentPath);
 }
 
-int isNumber(TokenArray *tokens) {
-	String *repeats = tokens->args[1];
-	for (int i = 0; i < repeats->length; i++) {
-		if (repeats->str[i] < '0' || repeats->str[i] > '9')
+int isNumber(String *number) {
+	for (int i = 0; i < number->length; i++) {
+		if (number->str[i] < '0' || number->str[i] > '9')
 			return 0;
 	}
 	return 1;
 }
 
-int toNumber(TokenArray *tokens) {
-	String *repeats = tokens->args[1];
-	int number = 0;
-	for (int i = (int)repeats->length - 1; i >= 0; i--) {
-		number *= 10;
-		number += repeats->str[i] - '0';
+unsigned long toNumber(String *number) {
+	unsigned long total = 0;
+	for (int i = (int)0; i < (int)number->length; i++) {
+        total *= 10;
+        total += number->str[i] - '0';
 	}
-	return number;
+	return total;
 }
 
 int folderExists(String path) {

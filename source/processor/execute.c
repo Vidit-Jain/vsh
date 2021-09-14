@@ -1,4 +1,5 @@
 #include "execute.h"
+#include "../commands/pinfo.h"
 
 unsigned int isCommand(TokenArray *tokens, String str) {
 	return isEqualString(*tokens->args[0], str);
@@ -15,7 +16,9 @@ void executeCommand(TokenArray *tokens) {
 		commandPWD(tokens);
 	} else if (isCommand(tokens, *initString("ls"))) {
 		commandLS(tokens);
-	} else if (isCommand(tokens, *initString("repeat"))) {
+	} else if (isCommand(tokens, *initString("pinfo"))) {
+        commandPinfo(tokens);
+    } else if (isCommand(tokens, *initString("repeat"))) {
 		int repeats = commandRepeat(tokens);
 		TokenArray *tokenReduced = newTokenArray();
 		for (int i = 2; i < tokens->argCount; i++) {

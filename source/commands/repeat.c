@@ -5,10 +5,10 @@ int commandRepeat(TokenArray *tokens) {
 		printf("repeat: Incorrect number of arguments\n");
 		return -1;
 	}
-	if (!isNumber(tokens)) {
+	if (!isNumber(tokens->args[1])) {
 		printf("repeat: Enter a number along with the command\n");
 		return -1;
 	}
-	int repeats = toNumber(tokens);
+	int repeats = (int)toNumber(tokens->args[1]);
 	return repeats;
 }
