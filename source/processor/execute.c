@@ -17,8 +17,8 @@ void executeCommand(TokenArray *tokens) {
 	} else if (isCommand(tokens, *initString("ls"))) {
 		commandLS(tokens);
 	} else if (isCommand(tokens, *initString("pinfo"))) {
-        commandPinfo(tokens);
-    } else if (isCommand(tokens, *initString("repeat"))) {
+		commandPinfo(tokens);
+	} else if (isCommand(tokens, *initString("repeat"))) {
 		int repeats = commandRepeat(tokens);
 		TokenArray *tokenReduced = newTokenArray();
 		for (int i = 2; i < tokens->argCount; i++) {

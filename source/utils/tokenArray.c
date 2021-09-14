@@ -6,14 +6,14 @@ TokenArray *newTokenArray() {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
 	tokens->args = (String **)malloc(MAX_ARGS * sizeof(String *));
 	tokens->maxSize = MAX_ARGS;
-    return tokens;
+	return tokens;
 }
 
 TokenArray *newTokenArrayCustom(unsigned int size) {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
 	tokens->args = (String **)malloc(size * sizeof(String *));
 	tokens->maxSize = size;
-    return tokens;
+	return tokens;
 }
 
 TokenArray *duplicateTokenArray(TokenArray *tokens) {

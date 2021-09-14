@@ -20,8 +20,8 @@ int isNumber(String *number) {
 unsigned long toNumber(String *number) {
 	unsigned long total = 0;
 	for (int i = (int)0; i < (int)number->length; i++) {
-        total *= 10;
-        total += number->str[i] - '0';
+		total *= 10;
+		total += number->str[i] - '0';
 	}
 	return total;
 }

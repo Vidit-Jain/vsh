@@ -52,7 +52,7 @@ String *initString(const char *str) {
 
 	strcpy(filledString->str, str);
 	filledString->length = stringLength;
-    return filledString;
+	return filledString;
 }
 
 unsigned int isEqualString(String str1, String str2) {
