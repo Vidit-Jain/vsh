@@ -132,15 +132,15 @@ int checkFlags(TokenArray *tokens) {
 		case 'l': flags |= 2; break;
 		case 'a': flags |= 1; break;
 		case '?':
-			printf("ls: invalid option -- '%c'\n", optopt);
+			errorHandler(INVALID_ARGS);
 			flags = -1;
 			break;
-		default: printf("ls: Unknown error\n"); break;
+		default: errorHandler(INVALID_ARGS);
 		}
 		if (flags == -1)
 			break;
 	}
-	optind = 1;
+	optind = 0;
 	return flags;
 }
 

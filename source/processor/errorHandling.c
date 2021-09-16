@@ -27,6 +27,9 @@ void errorHandler(int code) {
 	case GENERAL_NONFATAL: printPError(""); break;
 	case INCORRECT_ARGC: printError("Incorrect number of arguments\n"); break;
 	case INVALID_ARGS: printError("Invalid arguments passed\n"); break;
-	default: printError("Unknown error, aborting"); break;
+	default:
+		printError("Unknown error, aborting");
+		exit(1);
+		break;
 	}
 }

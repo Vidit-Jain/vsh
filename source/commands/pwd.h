@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 #include "../../globals.h"
-#include "../processor/errorHandling.h"
 #include "../commands/pwd.h"
+#include "../processor/errorHandling.h"
 #include "../utils/tokenArray.h"
 void commandPWD(TokenArray *tokens);
 #endif // VSH_PWD_H

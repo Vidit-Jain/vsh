@@ -17,6 +17,8 @@ void executeCommand(TokenArray *tokens) {
 		commandLS(tokens);
 	} else if (isCommand(tokens, *initString("pinfo"))) {
 		commandPinfo(tokens);
+	} else if (isCommand(tokens, *initString("exit"))) {
+		exit(1);
 	} else if (isCommand(tokens, *initString("repeat"))) {
 		int repeats = commandRepeat(tokens);
 		if (repeats == -1) {

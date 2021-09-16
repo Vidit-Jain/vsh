@@ -50,29 +50,27 @@ String *setCurrentPath() {
 	}
 }
 
-unsigned int inHomeDirectory() {
-	if (homePathDepth > currentPathDepth)
-		return 0;
-	if (homePath->length > currentPath->length)
+unsigned int inHomeDirectory(String *path) {
+	if (homePath->length > path->length)
 		return 0;
 
 	for (int i = 0; i < homePath->length; i++)
-		if (homePath->str[i] != currentPath->str[i])
+		if (homePath->str[i] != path->str[i])
 			return 0;
 
 	return 1;
 }
 
-void updateDisplayPath() {
-	if (displayPath == NULL)
-		displayPath = newString(PATH_MAX);
+void shortenPath(String **shortenedPath, String *path) {
+	if (*shortenedPath == NULL)
+		*shortenedPath = newString(PATH_MAX);
 
-	if (!inHomeDirectory()) {
-		stringCopy(displayPath, *currentPath);
+	if (!inHomeDirectory(path)) {
+		stringCopy(*shortenedPath, *path);
 		return;
 	}
-	sprintf(displayPath->str, "~%s", &(currentPath->str[homePath->length]));
-	updateLength(displayPath);
+	sprintf((*shortenedPath)->str, "~%s", &(path->str[homePath->length]));
+	updateLength(*shortenedPath);
 }
 
 void goToCurrentPath() {

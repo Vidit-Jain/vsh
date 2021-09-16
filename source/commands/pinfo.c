@@ -16,6 +16,7 @@ String *getExecutablePath(pid_t pid) {
 		errorHandler(GENERAL_NONFATAL);
 		return NULL;
 	}
+	updateLength(actualPath);
 	return actualPath;
 }
 
@@ -74,7 +75,9 @@ void pinfo(pid_t pid) {
 	String *executablePath = getExecutablePath(pid);
 	if (executablePath == NULL)
 		return;
-	printf("Executable Path -- %s\n", executablePath->str);
+	String *shortenedPath = newString();
+	shortenPath(&shortenedPath, executablePath);
+	printf("Executable Path -- %s\n", shortenedPath->str);
 }
 
 void commandPinfo(TokenArray *tokens) {
