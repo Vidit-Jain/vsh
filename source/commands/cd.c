@@ -1,12 +1,14 @@
 #include "cd.h"
 
 void changeDirectory(TokenArray *tokens) {
+	String *expandedPath = newString();
+	expandPath(&expandedPath, tokens->args[1]);
 	if (tokens->argCount == 1 ||
-		isEqualString(*(tokens->args[1]), *initString("~"))) {
+		isEqualString(*expandedPath, *initString("~"))) {
 		stringCopy(previousPath, *currentPath);
 		stringCopy(currentPath, *homePath);
 		goToCurrentPath();
-	} else if (isEqualString(*(tokens->args[1]), *initString("-"))) {
+	} else if (isEqualString(*expandedPath, *initString("-"))) {
 		String *temp = newString();
 		stringCopy(temp, *currentPath);
 		stringCopy(currentPath, *previousPath);
@@ -14,7 +16,7 @@ void changeDirectory(TokenArray *tokens) {
 		goToCurrentPath();
 	} else {
 		stringCopy(previousPath, *currentPath);
-		if (chdir(tokens->args[1]->str) == -1) {
+		if (chdir(expandedPath->str) == -1) {
 			errorHandler(GENERAL_NONFATAL);
 		}
 		setCurrentPath();

@@ -73,6 +73,18 @@ void shortenPath(String **shortenedPath, String *path) {
 	updateLength(*shortenedPath);
 }
 
+void expandPath(String **expandedPath, String *path) {
+	if (*expandedPath == NULL)
+		*expandedPath = newString();
+	if (path->str[0] != '~') {
+		stringCopy(*expandedPath, *path);
+		return;
+	}
+	stringCopy(*expandedPath, *homePath);
+	String *trimmedPath = initString(&path->str[1]);
+	concatenate(*expandedPath, trimmedPath);
+}
+
 void goToCurrentPath() {
 	if (chdir(currentPath->str) == -1) {
 		errorHandler(GENERAL_NONFATAL);

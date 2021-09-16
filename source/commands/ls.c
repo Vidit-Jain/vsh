@@ -261,15 +261,16 @@ void commandLS(TokenArray *tokens) {
 		for (int i = 1; i < tokens->argCount; i++) {
 			if (tokens->args[i]->str[0] == '-')
 				continue;
-			if (fileExists(*tokens->args[i])) {
-				printf("%s\n", tokens->args[i]->str);
+			String *expandedPath = newString();
+			expandPath(&expandedPath, tokens->args[i]);
+			if (fileExists(*expandedPath)) {
+				printf("%s\n", expandedPath->str);
 			} else {
 				if (flags & 2)
-					listDirectoriesVerbose(tokens->args[i], flags & 1,
+					listDirectoriesVerbose(expandedPath, flags & 1,
 										   (pathCount > 1));
 				else
-					listDirectories(tokens->args[i], flags & 1,
-									(pathCount > 1));
+					listDirectories(expandedPath, flags & 1, (pathCount > 1));
 			}
 			if (i != tokens->argCount - 1)
 				printf("\n");
