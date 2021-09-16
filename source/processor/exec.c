@@ -1,4 +1,5 @@
 #include "exec.h"
+#include "prompt.h"
 
 int isBackgroundProcess(TokenArray *tokens) {
 	String *lastToken = tokens->args[tokens->argCount - 1];
@@ -30,15 +31,21 @@ void exec(TokenArray *tokens) {
 				args[i] = tokens->args[i]->str;
 			}
 			execvp(tokens->args[0]->str, args);
+            exit(0);
 		} else {
-			if (isBackground)
-				printf("%d\n", grandChildId);
+			if (isBackground) {
+                printf("\n%d\n", grandChildId);
+                printPrompt();
+            }
 			int status;
 			wait(&status);
 			char *message = WIFEXITED(status) ? "normally" : "abnormally";
-			if (isBackground)
-				printf("%s with pid %d exited %s\n", tokens->args[0]->str,
-					   grandChildId, message);
+			if (isBackground) {
+                printf("\n%s with pid %d exited %s\n", tokens->args[0]->str,
+                       grandChildId, message);
+                printPrompt();
+            }
+            exit(0);
 		}
 	} else {
 		if (!isBackgroundProcess(tokens)) {
