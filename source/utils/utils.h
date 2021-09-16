@@ -10,6 +10,7 @@ void initInfo();
 int isNumber(String *number);
 unsigned long toNumber(String *number);
 int folderExists(String path);
+int fileExists(String path);
 String *getUser(uid_t uid);
 String *getGroup(gid_t gid);
 #endif // VSH_UTILS_H

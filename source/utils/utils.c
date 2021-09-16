@@ -31,6 +31,11 @@ int folderExists(String path) {
 	return stat(path.str, &sb) == 0 && S_ISDIR(sb.st_mode);
 }
 
+int fileExists(String path) {
+	struct stat sb;
+	return stat(path.str, &sb) == 0 && S_ISREG(sb.st_mode);
+}
+
 String *getUser(uid_t uid) {
 	struct passwd *user;
 	user = getpwuid(uid);
