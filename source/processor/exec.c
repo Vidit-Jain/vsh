@@ -7,6 +7,10 @@ int isBackgroundProcess(TokenArray *tokens) {
 
 void exec(TokenArray *tokens) {
 	pid_t childId = fork();
+	if (childId == -1) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
 	if (childId == 0) {
 		int isBackground = isBackgroundProcess(tokens);
 		if (isBackground) {

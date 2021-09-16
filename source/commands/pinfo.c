@@ -2,6 +2,8 @@
 
 int isForeground(pid_t pid) {
 	pid_t pgid = getpgid(pid);
+	if (getpgid(pid) == -1)
+		return -1;
 	return pgid == pid;
 }
 
@@ -10,6 +12,10 @@ String *getExecutablePath(pid_t pid) {
 	String *procPath = newString();
 	sprintf(procPath->str, "/proc/%d/exe", pid);
 	char *result = realpath(procPath->str, actualPath->str);
+	if (result == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return NULL;
+	}
 	return actualPath;
 }
 
@@ -18,7 +24,7 @@ String *getState(pid_t pid) {
 	sprintf(fileName->str, "/proc/%d/stat", pid);
 	FILE *fp = fopen(fileName->str, "rb");
 	if (fp == NULL) {
-		perror("Error: ");
+		errorHandler(GENERAL_NONFATAL);
 		return NULL;
 	}
 	String *state = newString();
@@ -35,7 +41,7 @@ unsigned long getVirtualMemorySize(pid_t pid) {
 	sprintf(fileName->str, "/proc/%d/stat", pid);
 	FILE *fp = fopen(fileName->str, "rb");
 	if (fp == NULL) {
-		perror("Error: ");
+		errorHandler(GENERAL_NONFATAL);
 		return -1;
 	}
 	String *state = newString();
@@ -50,21 +56,38 @@ unsigned long getVirtualMemorySize(pid_t pid) {
 
 void pinfo(pid_t pid) {
 	printf("pid -- %d\n", pid);
+	if (isForeground(pid) == -1) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
 	char *isPlus = isForeground(pid) ? "+" : "";
-	printf("Process Status -- %s%s\n", getState(pid)->str, isPlus);
+	String *state = getState(pid);
+	if (state == NULL)
+		return;
+	printf("Process Status -- %s%s\n", state->str, isPlus);
 
 	unsigned long memorySize = getVirtualMemorySize(pid);
+	if (memorySize == -1)
+		return;
 	printf("memory -- %lu\n", memorySize);
 
 	String *executablePath = getExecutablePath(pid);
+	if (executablePath == NULL)
+		return;
 	printf("Executable Path -- %s\n", executablePath->str);
 }
 
 void commandPinfo(TokenArray *tokens) {
 	pid_t pid = getpid();
+
+	if (tokens->argCount > 2) {
+		errorHandler(INCORRECT_ARGC);
+		return;
+	}
+
 	if (tokens->argCount != 1) {
 		if (!isNumber(tokens->args[1])) {
-			printf("pinfo: Invalid argument\n");
+			errorHandler(INVALID_ARGS);
 			return;
 		}
 		pid = (int)toNumber(tokens->args[1]);

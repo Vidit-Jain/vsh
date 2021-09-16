@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "../processor/errorHandling.h"
 #include "../utils/string.h"
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"

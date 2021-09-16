@@ -14,14 +14,16 @@ void changeDirectory(TokenArray *tokens) {
 		goToCurrentPath();
 	} else {
 		stringCopy(previousPath, *currentPath);
-		chdir(tokens->args[1]->str);
+		if (chdir(tokens->args[1]->str) == -1) {
+			errorHandler(GENERAL_NONFATAL);
+		}
 		setCurrentPath();
 	}
 }
 
 void commandCD(TokenArray *tokens) {
 	if (tokens->argCount > 2) {
-		printf("cd : Incorrect number of arguments\n");
+		errorHandler(INCORRECT_ARGC);
 		return;
 	}
 	changeDirectory(tokens);

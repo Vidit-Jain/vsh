@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <errno.h>
 
 #include "../../globals.h"
 #include "../processor/errorHandling.h"

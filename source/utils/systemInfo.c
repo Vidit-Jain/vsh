@@ -77,7 +77,7 @@ void updateDisplayPath() {
 
 void goToCurrentPath() {
 	if (chdir(currentPath->str) == -1) {
-		errorHandler(GENERAL_FATAL);
+		errorHandler(GENERAL_NONFATAL);
 	}
 	currentPathDepth = getDepth(*currentPath);
 }

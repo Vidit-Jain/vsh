@@ -1,9 +1,14 @@
 #include "errorHandling.h"
 
 void printError(const char *errorMessage) {
-	printf("\033[0;31m");
-	printf("%s\n", errorMessage);
-	printf("\033[0m");
+	fprintf(stderr, "\033[0;31m");
+	fprintf(stderr, "%s", errorMessage);
+	fprintf(stderr, "\033[0m");
+}
+void printPError(const char *errorMessage) {
+	fprintf(stderr, "\033[0;31m");
+	perror(errorMessage);
+	fprintf(stderr, "\033[0m");
 }
 void errorHandler(int code) {
 	switch (code) {
@@ -16,8 +21,12 @@ void errorHandler(int code) {
 		exit(1);
 		break;
 	case GENERAL_FATAL:
-		perror("Error: ");
+		printPError("");
 		exit(1);
 		break;
+	case GENERAL_NONFATAL: printPError(""); break;
+	case INCORRECT_ARGC: printError("Incorrect number of arguments\n"); break;
+	case INVALID_ARGS: printError("Invalid arguments passed\n"); break;
+	default: printError("Unknown error, aborting"); break;
 	}
 }

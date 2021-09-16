@@ -2,7 +2,7 @@
 
 void commandPWD(TokenArray *tokens) {
 	if (tokens->argCount != 1) {
-		printf("pwd: Too many arguments\n");
+		errorHandler(INCORRECT_ARGC);
 		return;
 	}
 	printf("%s\n", currentPath->str);

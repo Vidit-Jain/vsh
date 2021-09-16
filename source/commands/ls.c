@@ -3,9 +3,13 @@
 String *lastModified(time_t time) {
 	String *date = newString();
 
-	struct tm t;
-	t = *localtime(&time);
-	strftime(date->str, date->maxSize, "%b %d %H:%M", &t);
+	struct tm *t;
+	t = localtime(&time);
+	if (t == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return NULL;
+	}
+	strftime(date->str, date->maxSize, "%b %d %H:%M", t);
 	updateLength(date);
 	return date;
 }
@@ -14,8 +18,7 @@ String *filePermissions(String *filePath) {
 	String *permissions = initString("----------");
 	struct stat fileStat;
 	if (stat(filePath->str, &fileStat) < 0) {
-		printf("File: %s\n", filePath->str);
-		printf("Error: File not found\n");
+		errorHandler(GENERAL_NONFATAL);
 		return NULL;
 	}
 	if (S_ISDIR(fileStat.st_mode))
@@ -37,7 +40,12 @@ long countBlocks(String *path, int countHidden) {
 	DIR *directory;
 	struct dirent *dir;
 	directory = opendir(path->str);
+	if (directory == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return -1;
+	}
 	long count = 0;
+	errno = 0;
 	while ((dir = readdir(directory)) != NULL) {
 		if (dir->d_name[0] == '.' && !countHidden)
 			continue;
@@ -46,18 +54,30 @@ long countBlocks(String *path, int countHidden) {
 		stringCopy(temp, *path);
 		concatenate(temp, initString("/"));
 		concatenate(temp, initString(dir->d_name));
-		stat(temp->str, &file);
+		if (stat(temp->str, &file) < 0) {
+			errorHandler(GENERAL_NONFATAL);
+			return -1;
+		}
 		count += file.st_blocks;
+	}
+	if (errno) {
+		errorHandler(GENERAL_NONFATAL);
+		return -1;
 	}
 	return count / 2;
 }
 
-void findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
-					unsigned int *maxUserLength, unsigned int *maxGroupLength,
-					unsigned int *maxByteSize) {
+int findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
+				   unsigned int *maxUserLength, unsigned int *maxGroupLength,
+				   unsigned int *maxByteSize) {
 	DIR *directory;
 	struct dirent *dir;
 	directory = opendir(path->str);
+	if (directory == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return -1;
+	}
+	errno = 0;
 	while ((dir = readdir(directory)) != NULL) {
 		if (!showHidden && dir->d_name[0] == '.')
 			continue;
@@ -66,7 +86,10 @@ void findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
 		stringCopy(temp, *path);
 		concatenate(temp, initString("/"));
 		concatenate(temp, initString(dir->d_name));
-		stat(temp->str, &file);
+		if (stat(temp->str, &file) < 0) {
+			errorHandler(GENERAL_NONFATAL);
+			return -1;
+		}
 		String *userOwner = getUser(file.st_uid);
 		String *groupOwner = getGroup(file.st_gid);
 
@@ -89,7 +112,12 @@ void findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
 		*maxByteSize = MAX(*maxByteSize, byteLength);
 		*maxLinks = MAX(*maxLinks, linkLength);
 	}
-	closedir(directory);
+
+	if (closedir(directory) < 0) {
+		errorHandler(GENERAL_NONFATAL);
+		return -1;
+	}
+	return 0;
 }
 
 int checkFlags(TokenArray *tokens) {
@@ -135,12 +163,24 @@ void listDirectories(String *path, int showHidden, int displayName) {
 	DIR *directory;
 	struct dirent *dir;
 	directory = opendir(path->str);
+	if (directory == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
+	errno = 0;
 	while ((dir = readdir(directory)) != NULL) {
 		if (!showHidden && dir->d_name[0] == '.')
 			continue;
 		printf("%s\n", dir->d_name);
 	}
-	closedir(directory);
+	if (errno) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
+	if (closedir(directory) < 0) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
 }
 
 void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
@@ -151,18 +191,29 @@ void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 	if (displayName) {
 		printf("%s:\n", path->str);
 	}
-	DIR *directory;
 	long totalBlocks = countBlocks(path, showHidden);
+	if (totalBlocks == -1) {
+		return;
+	}
 	printf("total %ld\n", totalBlocks);
 	unsigned int maxLinks = 0, maxUserLength = 0, maxGroupLength = 0,
 				 maxByteSize = 0;
-	findMaxLengths(path, showHidden, &maxLinks, &maxUserLength, &maxGroupLength,
-				   &maxByteSize);
+	int err = findMaxLengths(path, showHidden, &maxLinks, &maxUserLength,
+							 &maxGroupLength, &maxByteSize);
+	if (err < 0) {
+		return;
+	}
 	char buf[80];
 	sprintf(buf, "%%s %%%uld %%-%us %%-%us %%%uld %%s %%s\n", maxLinks,
 			maxUserLength, maxGroupLength, maxByteSize);
+	DIR *directory;
 	struct dirent *dir;
 	directory = opendir(path->str);
+	if (directory == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
+	errno = 0;
 	while ((dir = readdir(directory)) != NULL) {
 		if (!showHidden && dir->d_name[0] == '.')
 			continue;
@@ -171,14 +222,28 @@ void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 		stringCopy(temp, *path);
 		concatenate(temp, initString("/"));
 		concatenate(temp, initString(dir->d_name));
-		stat(temp->str, &file);
+		if (stat(temp->str, &file) < 0) {
+			errorHandler(GENERAL_NONFATAL);
+			return;
+		}
 		String *userOwner = getUser(file.st_uid);
 		String *groupOwner = getGroup(file.st_gid);
 		String *date = lastModified(file.st_mtim.tv_sec);
-		printf(buf, filePermissions(temp)->str, file.st_nlink, userOwner->str,
+		String *permissions = filePermissions(temp);
+		if (permissions == NULL) {
+			return;
+		}
+		printf(buf, permissions->str, file.st_nlink, userOwner->str,
 			   groupOwner->str, file.st_size, date->str, dir->d_name);
 	}
-	closedir(directory);
+	if (errno) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
+	if (closedir(directory) < 0) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
 }
 
 void commandLS(TokenArray *tokens) {

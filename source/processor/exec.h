@@ -6,5 +6,6 @@
 
 #include "../utils/string.h"
 #include "../utils/tokenArray.h"
+#include "errorHandling.h"
 void exec(TokenArray *tokens);
 #endif // VSH_EXEC_H
