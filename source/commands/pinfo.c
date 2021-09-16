@@ -22,10 +22,11 @@ String *getState(pid_t pid) {
 		return NULL;
 	}
 	String *state = newString();
-	char *buffer = (char *)malloc(100 * sizeof(char));
+	String *buffer = newString();
 	for (int i = 0; i < 2; i++)
-		fscanf(fp, "%s", buffer);
+		fscanf(fp, "%s", buffer->str);
 	fscanf(fp, "%s", state->str);
+	updateLength(state);
 	return state;
 }
 
@@ -38,9 +39,9 @@ unsigned long getVirtualMemorySize(pid_t pid) {
 		return -1;
 	}
 	String *state = newString();
-	char *buffer = (char *)malloc(100 * sizeof(char));
+	String *buffer = newString();
 	for (int i = 0; i < 22; i++)
-		fscanf(fp, "%s", buffer);
+		fscanf(fp, "%s", buffer->str);
 	fscanf(fp, "%s", state->str);
 	updateLength(state);
 	unsigned long totalSize = toNumber(state);

@@ -3,6 +3,7 @@
 #include <grp.h>
 #include <sys/stat.h>
 
+#include "../processor/errorHandling.h"
 #include "systemInfo.h"
 #include "tokenArray.h"
 void initInfo();

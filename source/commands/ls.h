@@ -9,6 +9,7 @@
 #include <time.h>
 
 #include "../../globals.h"
+#include "../processor/errorHandling.h"
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"
 String *filePermissions(String *filePath);

@@ -1,5 +1,6 @@
 #ifndef VSH_TOKENARRAY_H
 #define VSH_TOKENARRAY_H
+#include "../processor/errorHandling.h"
 #include "string.h"
 typedef struct tokenArray TokenArray;
 struct tokenArray {

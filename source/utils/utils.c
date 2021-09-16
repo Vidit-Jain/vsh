@@ -34,11 +34,15 @@ int folderExists(String path) {
 String *getUser(uid_t uid) {
 	struct passwd *user;
 	user = getpwuid(uid);
+	if (user == NULL)
+		errorHandler(GENERAL_FATAL);
 	return initString(user->pw_name);
 }
 
 String *getGroup(gid_t gid) {
 	struct group *user;
 	user = getgrgid(gid);
+	if (user == NULL)
+		errorHandler(GENERAL_FATAL);
 	return initString(user->gr_name);
 }

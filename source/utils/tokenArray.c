@@ -4,14 +4,26 @@ const unsigned int MAX_ARGS = 256;
 
 TokenArray *newTokenArray() {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
+	if (tokens == NULL)
+		errorHandler(BAD_MALLOC);
+
 	tokens->args = (String **)malloc(MAX_ARGS * sizeof(String *));
+	if (tokens->args == NULL)
+		errorHandler(BAD_MALLOC);
 	tokens->maxSize = MAX_ARGS;
 	return tokens;
 }
 
 TokenArray *newTokenArrayCustom(unsigned int size) {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
+	if (tokens == NULL)
+		errorHandler(BAD_MALLOC);
+
+	if (size == 0)
+		errorHandler(INVALID_SIZE);
 	tokens->args = (String **)malloc(size * sizeof(String *));
+	if (tokens->args == NULL)
+		errorHandler(BAD_MALLOC);
 	tokens->maxSize = size;
 	return tokens;
 }

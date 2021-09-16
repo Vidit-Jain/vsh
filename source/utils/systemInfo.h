@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "../../globals.h"
+#include "../processor/errorHandling.h"
 #include "string.h"
 
 void setUsername();

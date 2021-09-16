@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "../processor/errorHandling.h"
 typedef struct string String;
 struct string {
 	char *str;

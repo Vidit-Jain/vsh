@@ -4,9 +4,13 @@ const unsigned int MAX_LEN = 256;
 String *newString() {
 	String *str1;
 	str1 = (String *)malloc(sizeof(String));
+	if (str1 == NULL)
+		errorHandler(BAD_MALLOC);
 
 	str1->maxSize = MAX_LEN;
 	str1->str = (char *)malloc(str1->maxSize * sizeof(char));
+	if (str1->str == NULL)
+		errorHandler(BAD_MALLOC);
 	str1->str[0] = '\0';
 	str1->length = 0;
 
@@ -16,11 +20,15 @@ String *newString() {
 String *newStringCustom(unsigned int size) {
 	String *str1;
 	str1 = (String *)malloc(sizeof(String));
+	if (str1 == NULL)
+		errorHandler(BAD_MALLOC);
 
-	assert(size != 0);
-
+	if (size == 0)
+		errorHandler(INVALID_SIZE);
 	str1->maxSize = size;
 	str1->str = (char *)malloc(size * sizeof(char));
+	if (str1->str == NULL)
+		errorHandler(BAD_MALLOC);
 	str1->str[0] = '\0';
 	str1->length = 0;
 
@@ -32,8 +40,11 @@ void stringCopy(String *dest, String src) {
 	if (dest == NULL)
 		dest = newString();
 
-	if (src.length >= dest->maxSize)
+	if (src.length >= dest->maxSize) {
 		dest->str = (char *)malloc((src.length + 1) * sizeof(char *));
+		if (dest->str == NULL)
+			errorHandler(BAD_MALLOC);
+	}
 
 	strcpy(dest->str, src.str);
 	dest->length = src.length;

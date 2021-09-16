@@ -187,7 +187,6 @@ void commandLS(TokenArray *tokens) {
 		return;
 
 	int pathCount = countPaths(tokens);
-
 	if (pathCount == 0) {
 		if (flags & 2)
 			listDirectoriesVerbose(currentPath, flags & 1, 0);

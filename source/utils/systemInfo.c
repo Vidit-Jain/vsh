@@ -2,12 +2,16 @@
 
 void setUsername() {
 	struct passwd *pass = getpwuid(getuid());
+	if (pass == NULL)
+		errorHandler(GENERAL_FATAL);
 	username = initString(pass->pw_name);
 }
 
 void setSystemName() {
 	systemName = newString();
-	gethostname(systemName->str, systemName->maxSize);
+	if (gethostname(systemName->str, systemName->maxSize) == -1) {
+		errorHandler(GENERAL_FATAL);
+	}
 	updateLength(systemName);
 }
 
@@ -27,6 +31,7 @@ String *setHomePath() {
 		homePathDepth = getDepth(*homePath);
 		return homePath;
 	} else {
+		errorHandler(GENERAL_FATAL);
 		homePathDepth = 0;
 		return NULL;
 	}
@@ -39,6 +44,7 @@ String *setCurrentPath() {
 		currentPathDepth = getDepth(*currentPath);
 		return currentPath;
 	} else {
+		errorHandler(GENERAL_FATAL);
 		currentPathDepth = 0;
 		return NULL;
 	}
@@ -70,6 +76,8 @@ void updateDisplayPath() {
 }
 
 void goToCurrentPath() {
-	chdir(currentPath->str);
+	if (chdir(currentPath->str) == -1) {
+		errorHandler(GENERAL_FATAL);
+	}
 	currentPathDepth = getDepth(*currentPath);
 }
