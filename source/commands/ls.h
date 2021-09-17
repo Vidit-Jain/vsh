@@ -13,6 +13,7 @@
 #include "../processor/errorHandling.h"
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"
+#define SIX_MONTHS 15780000
 String *filePermissions(String *filePath);
 void commandLS(TokenArray *tokens);
 #endif // VSH_LS_H

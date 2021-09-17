@@ -1,15 +1,22 @@
 #include "ls.h"
 
-String *lastModified(time_t time) {
+String *lastModified(time_t modifiedTime) {
 	String *date = newString();
 
-	struct tm *t;
-	t = localtime(&time);
-	if (t == NULL) {
+	struct tm *modifiedTimeStruct;
+    modifiedTimeStruct = localtime(&modifiedTime);
+	if (modifiedTimeStruct == NULL) {
 		errorHandler(GENERAL_NONFATAL);
 		return NULL;
 	}
-	strftime(date->str, date->maxSize, "%b %d %H:%M", t);
+    time_t now = time(NULL);
+    time_t diff = now - modifiedTime;
+    if (now < diff || diff >= SIX_MONTHS) {
+        strftime(date->str, date->maxSize, "%b %d  %Y", modifiedTimeStruct);
+    }
+    else {
+        strftime(date->str, date->maxSize, "%b %d %H:%M", modifiedTimeStruct);
+    }
 	updateLength(date);
 	return date;
 }
