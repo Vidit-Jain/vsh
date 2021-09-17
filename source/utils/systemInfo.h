@@ -18,5 +18,6 @@ unsigned int inHomeDirectory(String *path);
 String *shortenPath(String *path);
 String *expandPath(String *path);
 void goToCurrentPath();
+void setActualHome();
 
 #endif // VSH_SYSTEMINFO_H

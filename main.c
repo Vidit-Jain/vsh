@@ -1,3 +1,4 @@
+#include "source/commands/history.h"
 #include "source/processor/execute.h"
 #include "source/processor/prompt.h"
 #include "source/utils/tokenArray.h"
@@ -19,6 +20,7 @@ int main() {
 			input->length++;
 		}
 		input->str[input->length] = '\0';
+		addHistory(input);
 		executeLine(tokens, *input);
 	}
 }

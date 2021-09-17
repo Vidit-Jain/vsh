@@ -13,10 +13,11 @@ void changeDirectory(TokenArray *tokens) {
 		stringCopy(previousPath, *temp);
 		goToCurrentPath();
 	} else {
-		stringCopy(previousPath, *currentPath);
 		if (chdir(tokens->args[1]->str) == -1) {
 			errorHandler(GENERAL_NONFATAL);
+			return;
 		}
+		stringCopy(previousPath, *currentPath);
 		setCurrentPath();
 	}
 }

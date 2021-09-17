@@ -13,4 +13,6 @@ extern String *previousPath;
 
 extern String *username;
 extern String *systemName;
+
+extern String *actualHome;
 #endif // VSH_GLOBALS_H

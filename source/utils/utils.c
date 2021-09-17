@@ -3,6 +3,7 @@
 void initInfo() {
 	setHomePath();
 	setCurrentPath();
+	setActualHome();
 	previousPath = newString();
 	setUsername();
 	setSystemName();

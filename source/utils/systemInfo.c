@@ -23,7 +23,12 @@ unsigned int getDepth(String path) {
 	}
 	return depth;
 }
-
+void setActualHome() {
+	actualHome = newString();
+	if ((actualHome->str = getenv("HOME")) == NULL) {
+		actualHome->str = getpwuid(getuid())->pw_dir;
+	}
+}
 String *setHomePath() {
 	homePath = newStringCustom(PATH_MAX);
 	if (getcwd(homePath->str, homePath->maxSize) != NULL) {
