@@ -3,7 +3,9 @@
 #include "source/processor/prompt.h"
 #include "source/utils/tokenArray.h"
 #include "source/utils/utils.h"
+void ignore_sigint() {}
 int main() {
+	signal(SIGINT, SIG_IGN);
 	initInfo();
 	String *input = newString();
 	TokenArray *tokens = newTokenArray();

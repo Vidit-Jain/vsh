@@ -1,6 +1,6 @@
 #include "exec.h"
 #include "prompt.h"
-
+void sigint_handler() { exit(0); }
 int isBackgroundProcess(TokenArray *tokens) {
 	String *lastToken = tokens->args[tokens->argCount - 1];
 	return lastToken->str[lastToken->length - 1] == '&';
@@ -13,6 +13,7 @@ void exec(TokenArray *tokens) {
 		return;
 	}
 	if (childId == 0) {
+		signal(SIGINT, sigint_handler);
 		int isBackground = isBackgroundProcess(tokens);
 		if (isBackground) {
 			String *lastToken = tokens->args[tokens->argCount - 1];
@@ -26,14 +27,16 @@ void exec(TokenArray *tokens) {
 		}
 		pid_t grandChildId = fork();
 		if (grandChildId == 0) {
-			char *args[tokens->argCount];
+			char *args[tokens->argCount + 1];
 			for (int i = 0; i < tokens->argCount; i++) {
 				args[i] = tokens->args[i]->str;
 			}
+			args[tokens->argCount] = NULL;
 			execvp(tokens->args[0]->str, args);
 			exit(0);
 		} else {
 			if (isBackground) {
+				signal(SIGINT, SIG_IGN);
 				printf("\n%d\n", grandChildId);
 				printPrompt();
 			}
