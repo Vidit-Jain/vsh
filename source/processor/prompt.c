@@ -1,7 +1,7 @@
 #include "prompt.h"
 
 void printPrompt() {
-	shortenPath(&displayPath, currentPath);
+	displayPath = shortenPath(currentPath);
 	printf("<%s@%s:%s> ", username->str, systemName->str, displayPath->str);
-    fflush(stdout);
+	fflush(stdout);
 }

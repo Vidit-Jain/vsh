@@ -4,19 +4,18 @@ String *lastModified(time_t modifiedTime) {
 	String *date = newString();
 
 	struct tm *modifiedTimeStruct;
-    modifiedTimeStruct = localtime(&modifiedTime);
+	modifiedTimeStruct = localtime(&modifiedTime);
 	if (modifiedTimeStruct == NULL) {
 		errorHandler(GENERAL_NONFATAL);
 		return NULL;
 	}
-    time_t now = time(NULL);
-    time_t diff = now - modifiedTime;
-    if (now < diff || diff >= SIX_MONTHS) {
-        strftime(date->str, date->maxSize, "%b %d  %Y", modifiedTimeStruct);
-    }
-    else {
-        strftime(date->str, date->maxSize, "%b %d %H:%M", modifiedTimeStruct);
-    }
+	time_t now = time(NULL);
+	time_t diff = now - modifiedTime;
+	if (now < diff || diff >= SIX_MONTHS) {
+		strftime(date->str, date->maxSize, "%b %d  %Y", modifiedTimeStruct);
+	} else {
+		strftime(date->str, date->maxSize, "%b %d %H:%M", modifiedTimeStruct);
+	}
 	updateLength(date);
 	return date;
 }
@@ -161,7 +160,9 @@ int countPaths(TokenArray *tokens) {
 
 void listDirectories(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
-		printf("%s: No such directory exists\n", path->str);
+		fprintf(stderr, "\033[0;31m");
+		fprintf(stderr, "%s: No such directory exists\n", path->str);
+		fprintf(stderr, "\033[0m");
 		return;
 	}
 	if (displayName) {
@@ -192,7 +193,9 @@ void listDirectories(String *path, int showHidden, int displayName) {
 
 void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
-		printf("%s: No such directory exists\n", path->str);
+		fprintf(stderr, "\033[0;31m");
+		fprintf(stderr, "%s: No such directory exists\n", path->str);
+		fprintf(stderr, "\033[0m");
 		return;
 	}
 	if (displayName) {
@@ -268,16 +271,15 @@ void commandLS(TokenArray *tokens) {
 		for (int i = 1; i < tokens->argCount; i++) {
 			if (tokens->args[i]->str[0] == '-')
 				continue;
-			String *expandedPath = newString();
-			expandPath(&expandedPath, tokens->args[i]);
-			if (fileExists(*expandedPath)) {
-				printf("%s\n", expandedPath->str);
+			if (fileExists(*tokens->args[i])) {
+				printf("%s\n", tokens->args[i]->str);
 			} else {
 				if (flags & 2)
-					listDirectoriesVerbose(expandedPath, flags & 1,
+					listDirectoriesVerbose(tokens->args[i], flags & 1,
 										   (pathCount > 1));
 				else
-					listDirectories(expandedPath, flags & 1, (pathCount > 1));
+					listDirectories(tokens->args[i], flags & 1,
+									(pathCount > 1));
 			}
 			if (i != tokens->argCount - 1)
 				printf("\n");

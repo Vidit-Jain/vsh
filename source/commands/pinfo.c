@@ -75,8 +75,7 @@ void pinfo(pid_t pid) {
 	String *executablePath = getExecutablePath(pid);
 	if (executablePath == NULL)
 		return;
-	String *shortenedPath = newString();
-	shortenPath(&shortenedPath, executablePath);
+	String *shortenedPath = shortenPath(executablePath);
 	printf("Executable Path -- %s\n", shortenedPath->str);
 }
 

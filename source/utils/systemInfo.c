@@ -61,28 +61,25 @@ unsigned int inHomeDirectory(String *path) {
 	return 1;
 }
 
-void shortenPath(String **shortenedPath, String *path) {
-	if (*shortenedPath == NULL)
-		*shortenedPath = newString(PATH_MAX);
-
+String *shortenPath(String *path) {
+	String *shortenedPath = newStringCustom(PATH_MAX);
 	if (!inHomeDirectory(path)) {
-		stringCopy(*shortenedPath, *path);
-		return;
+		stringCopy(shortenedPath, *path);
+		return shortenedPath;
 	}
-	sprintf((*shortenedPath)->str, "~%s", &(path->str[homePath->length]));
-	updateLength(*shortenedPath);
+	sprintf(shortenedPath->str, "~%s", &(path->str[homePath->length]));
+	updateLength(shortenedPath);
+	return shortenedPath;
 }
-
-void expandPath(String **expandedPath, String *path) {
-	if (*expandedPath == NULL)
-		*expandedPath = newString();
+String *expandPath(String *path) {
+	String *expandedPath = newStringCustom(PATH_MAX);
 	if (path->str[0] != '~') {
-		stringCopy(*expandedPath, *path);
-		return;
+		stringCopy(expandedPath, *path);
+		return expandedPath;
 	}
-	stringCopy(*expandedPath, *homePath);
+	stringCopy(expandedPath, *homePath);
 	String *trimmedPath = initString(&path->str[1]);
-	concatenate(*expandedPath, trimmedPath);
+	concatenate(expandedPath, trimmedPath);
 }
 
 void goToCurrentPath() {

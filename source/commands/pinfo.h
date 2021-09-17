@@ -9,6 +9,5 @@
 #include "../utils/systemInfo.h"
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"
-void pinfo(pid_t pid);
 void commandPinfo(TokenArray *tokens);
 #endif // VSH_PINFO_H

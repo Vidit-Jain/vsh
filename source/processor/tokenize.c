@@ -1,5 +1,9 @@
 #include "tokenize.h"
-
+void expandArgs(TokenArray *tokens) {
+	for (int i = 1; i < tokens->argCount; i++) {
+		tokens->args[i] = expandPath(tokens->args[i]);
+	}
+}
 void tokenizeCommand(TokenArray *tokens, String input) {
 	char *currentToken;
 	currentToken = strtok(input.str, " \t");
@@ -10,4 +14,5 @@ void tokenizeCommand(TokenArray *tokens, String input) {
 		tokens->argCount++;
 	}
 	tokens->args[tokens->argCount] = NULL;
+	expandArgs(tokens);
 }
