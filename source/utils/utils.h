@@ -3,6 +3,7 @@
 #include <grp.h>
 #include <sys/stat.h>
 
+#include "../commands/history.h"
 #include "../processor/errorHandling.h"
 #include "../processor/runningProcesses.h"
 #include "systemInfo.h"

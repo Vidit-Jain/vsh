@@ -1,4 +1,6 @@
 #include "history.h"
+char *history[MAX_HISTORY];
+int totalHistory;
 void createFile(char *name) {
 	FILE *fp = fopen(name, "wb");
 	if (fp == NULL) {
@@ -10,45 +12,55 @@ void createFile(char *name) {
 		return;
 	}
 }
-void addHistory(String *command) {
+void initHistory() {
+	totalHistory = 0;
 	String *historyPath = newString();
 	sprintf(historyPath->str, "%s/.vsh_history", actualHome->str);
-	// Using $HOME for common vsh_history for all shell calls
+	createFile(historyPath->str);
 	FILE *fp = fopen(historyPath->str, "r");
 	if (fp == NULL) {
-		createFile(historyPath->str);
-		fp = fopen(historyPath->str, "r");
-		if (fp == NULL) {
-			errorHandler(GENERAL_NONFATAL);
-			return;
-		}
-	}
-	char *history[20];
-	for (int i = 0; i < 20; i++)
-		history[i] = (char *)malloc(MAX_COMMAND_SIZE * sizeof(char));
-	history[0] = command->str;
-	int index = 1;
-	while (fgets(history[index], MAX_COMMAND_SIZE, fp)) {
-		int x = (int)strlen(history[index]);
-		if (history[index][x - 1] == '\n')
-			history[index][x - 1] = '\0';
-
-		index++;
-		if (index == 20)
-			break;
-	}
-	if (fclose(fp) == EOF) {
 		errorHandler(GENERAL_NONFATAL);
 		return;
 	}
-	fp = fopen(historyPath->str, "w");
+	for (int i = 0; i < MAX_HISTORY; i++) {
+		history[i] = (char *)malloc(MAX_COMMAND_SIZE * sizeof(char));
+		if (history[i] == NULL)
+			errorHandler(BAD_MALLOC);
+	}
+
+	while (fgets(history[totalHistory], MAX_COMMAND_SIZE, fp)) {
+		int x = (int)strlen(history[totalHistory]);
+		if (history[totalHistory][x - 1] == '\n')
+			history[totalHistory][x - 1] = '\0';
+
+		totalHistory++;
+		if (totalHistory == MAX_HISTORY)
+			break;
+	}
+}
+void addHistory(String *command) {
+	String *historyPath = newString();
+	// Using $HOME for common vsh_history for all shell calls
+	sprintf(historyPath->str, "%s/.vsh_history", actualHome->str);
+	if (totalHistory != 0 && strcmp(command->str, history[0]) == 0)
+		return;
+	for (int i = MAX_HISTORY - 1; i > 0; i--) {
+		history[i] = history[i - 1];
+	}
+	history[0] = (char *)malloc(MAX_COMMAND_SIZE * sizeof(char));
+	if (history[0] == NULL)
+		errorHandler(BAD_MALLOC);
+	strcpy(history[0], command->str);
+	totalHistory = MIN(totalHistory + 1, MAX_HISTORY);
+
+	FILE *fp = fopen(historyPath->str, "w");
 	if (fp == NULL) {
 		errorHandler(GENERAL_NONFATAL);
 		return;
 	}
-	for (int i = 0; i < index; i++) {
+	for (int i = 0; i < totalHistory; i++) {
 		fprintf(fp, "%s", history[i]);
-		if (i != index - 1) {
+		if (i != totalHistory - 1) {
 			fprintf(fp, "\n");
 		}
 	}
@@ -58,31 +70,9 @@ void addHistory(String *command) {
 	}
 }
 void printHistory(int num) {
-	String *historyPath = newString();
-	sprintf(historyPath->str, "%s/.vsh_history", actualHome->str);
-	FILE *fp = fopen(historyPath->str, "r");
-	if (fp == NULL) {
-		return;
-	}
-	char *history[20];
-	for (int i = 0; i < 20; i++)
-		history[i] = (char *)malloc(MAX_COMMAND_SIZE * sizeof(char));
-	int index = 0;
-	while (fgets(history[index], MAX_COMMAND_SIZE, fp)) {
-		int x = (int)strlen(history[index]);
-		if (history[index][x - 1] == '\n')
-			history[index][x - 1] = '\0';
-
-		index++;
-		if (index == num)
-			break;
-	}
-	for (int i = index - 1; i >= 0; i--) {
+	num = MIN(num, totalHistory);
+	for (int i = num - 1; i >= 0; i--) {
 		printf("%s\n", history[i]);
-	}
-	if (fclose(fp) == EOF) {
-		errorHandler(GENERAL_NONFATAL);
-		return;
 	}
 }
 void commandHistory(TokenArray *tokens) {
