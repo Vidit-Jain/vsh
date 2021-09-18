@@ -158,32 +158,29 @@ int countPaths(TokenArray *tokens) {
 	return pathCount;
 }
 
-void listFile(char* fileName) {
-    printf("%s\n", fileName);
-}
+void listFile(char *fileName) { printf("%s\n", fileName); }
 void listFileVerbose(String *path, char *fileName, char *buf) {
-    struct stat file;
-    if (stat(path->str, &file) < 0) {
-        errorHandler(GENERAL_NONFATAL);
-        return;
-    }
-    if (buf == NULL) {
-        buf = "%s %ld %s %s %ld %s %s\n";
-    }
-    String *userOwner = getUser(file.st_uid);
-    String *groupOwner = getGroup(file.st_gid);
-    String *date = lastModified(file.st_mtim.tv_sec);
-    String *permissions = filePermissions(path);
-    if (permissions == NULL) {
-        return;
-    }
-    printf(buf, permissions->str, file.st_nlink, userOwner->str,
-           groupOwner->str, file.st_size, date->str, fileName);
-
+	struct stat file;
+	if (stat(path->str, &file) < 0) {
+		errorHandler(GENERAL_NONFATAL);
+		return;
+	}
+	if (buf == NULL) {
+		buf = "%s %ld %s %s %ld %s %s\n";
+	}
+	String *userOwner = getUser(file.st_uid);
+	String *groupOwner = getGroup(file.st_gid);
+	String *date = lastModified(file.st_mtim.tv_sec);
+	String *permissions = filePermissions(path);
+	if (permissions == NULL) {
+		return;
+	}
+	printf(buf, permissions->str, file.st_nlink, userOwner->str,
+		   groupOwner->str, file.st_size, date->str, fileName);
 }
 void listDirectories(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
-        errorHandler(GENERAL_NONFATAL);
+		errorHandler(GENERAL_NONFATAL);
 		return;
 	}
 	if (displayName) {
@@ -200,7 +197,7 @@ void listDirectories(String *path, int showHidden, int displayName) {
 	while ((dir = readdir(directory)) != NULL) {
 		if (!showHidden && dir->d_name[0] == '.')
 			continue;
-        listFile(dir->d_name);
+		listFile(dir->d_name);
 	}
 	if (errno) {
 		errorHandler(GENERAL_NONFATAL);
@@ -213,7 +210,7 @@ void listDirectories(String *path, int showHidden, int displayName) {
 }
 void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
-        errorHandler(GENERAL_NONFATAL);
+		errorHandler(GENERAL_NONFATAL);
 		return;
 	}
 	if (displayName) {
@@ -250,7 +247,7 @@ void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 		concatenate(temp, initString("/"));
 		concatenate(temp, initString(dir->d_name));
 
-        listFileVerbose(temp, dir->d_name, buf);
+		listFileVerbose(temp, dir->d_name, buf);
 	}
 	if (errno) {
 		errorHandler(GENERAL_NONFATAL);
@@ -278,24 +275,22 @@ void commandLS(TokenArray *tokens) {
 			if (tokens->args[i]->str[0] == '-')
 				continue;
 
-            if (flags & 2) {
-                if (fileExists(*tokens->args[i])) {
-                    listFileVerbose(tokens->args[i], tokens->args[i]->str,NULL);
-                }
-                else {
-                    listDirectoriesVerbose(tokens->args[i], flags & 1,
-                                           (pathCount > 1));
-                }
-            }
-            else {
-                if (fileExists(*tokens->args[i])) {
-                    listFile(tokens->args[i]->str);
-                }
-                else {
-                    listDirectories(tokens->args[i], flags & 1,
-                                    (pathCount > 1));
-                }
-            }
+			if (flags & 2) {
+				if (fileExists(*tokens->args[i])) {
+					listFileVerbose(tokens->args[i], tokens->args[i]->str,
+									NULL);
+				} else {
+					listDirectoriesVerbose(tokens->args[i], flags & 1,
+										   (pathCount > 1));
+				}
+			} else {
+				if (fileExists(*tokens->args[i])) {
+					listFile(tokens->args[i]->str);
+				} else {
+					listDirectories(tokens->args[i], flags & 1,
+									(pathCount > 1));
+				}
+			}
 			if (i != tokens->argCount - 1)
 				printf("\n");
 		}
