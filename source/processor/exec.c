@@ -33,6 +33,7 @@ void exec(TokenArray *tokens) {
 			}
 			args[tokens->argCount] = NULL;
 			execvp(tokens->args[0]->str, args);
+            errorHandler(GENERAL_NONFATAL);
 			exit(0);
 		} else {
 			if (isBackground) {
