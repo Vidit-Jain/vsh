@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 
 #include "../processor/errorHandling.h"
+#include "../processor/runningProcesses.h"
 #include "systemInfo.h"
 #include "tokenArray.h"
 void initInfo();

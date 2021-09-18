@@ -12,7 +12,7 @@ void changeDirectory(TokenArray *tokens) {
 		stringCopy(currentPath, *previousPath);
 		stringCopy(previousPath, *temp);
 		goToCurrentPath();
-        printf("%s\n", currentPath->str);
+		printf("%s\n", currentPath->str);
 	} else {
 		if (chdir(tokens->args[1]->str) == -1) {
 			errorHandler(GENERAL_NONFATAL);

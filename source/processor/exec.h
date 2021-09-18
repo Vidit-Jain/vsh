@@ -7,5 +7,7 @@
 #include "../utils/string.h"
 #include "../utils/tokenArray.h"
 #include "errorHandling.h"
+#include "prompt.h"
+#include "runningProcesses.h"
 void exec(TokenArray *tokens);
 #endif // VSH_EXEC_H
