@@ -9,5 +9,6 @@
 #include "errorHandling.h"
 #include "prompt.h"
 #include "runningProcesses.h"
+#include "signalHandling.h"
 void exec(TokenArray *tokens);
 #endif // VSH_EXEC_H

@@ -1,5 +1,4 @@
 #include "exec.h"
-void sigint_handler() { exit(0); }
 int isBackgroundProcess(TokenArray *tokens) {
 	String *lastToken = tokens->args[tokens->argCount - 1];
 	return lastToken->str[lastToken->length - 1] == '&';
