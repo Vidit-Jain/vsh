@@ -1,5 +1,6 @@
 #ifndef VSH_RUNNINGPROCESSES_H
 #define VSH_RUNNINGPROCESSES_H
+#include "errorHandling.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

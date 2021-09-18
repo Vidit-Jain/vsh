@@ -3,7 +3,11 @@ Process *head;
 void initProcessList() { head = NULL; }
 Process *createProcess(char *name, pid_t pid) {
 	Process *p = (Process *)malloc(sizeof(Process));
+	if (p == NULL)
+		errorHandler(BAD_MALLOC);
 	p->name = (char *)malloc((strlen(name) + 1) * sizeof(char));
+	if (p->name == NULL)
+		errorHandler(BAD_MALLOC);
 	strcpy(p->name, name);
 	p->pid = pid;
 	p->nextProcess = NULL;

@@ -9,6 +9,7 @@ void initInfo() {
 	previousPath = newString();
 	stringCopy(previousPath, *currentPath);
 	initProcessList();
+	initHistory();
 }
 
 int isNumber(String *number) {
