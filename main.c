@@ -1,11 +1,12 @@
 #include "source/commands/history.h"
 #include "source/processor/execute.h"
 #include "source/processor/prompt.h"
+#include "source/processor/signalHandling.h"
 #include "source/utils/tokenArray.h"
 #include "source/utils/utils.h"
-void ignore_sigint() {}
 int main() {
 	signal(SIGINT, SIG_IGN);
+	signal(SIGCHLD, child_handler);
 	initInfo();
 	String *input = newString();
 	TokenArray *tokens = newTokenArray();

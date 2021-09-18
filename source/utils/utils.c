@@ -4,10 +4,11 @@ void initInfo() {
 	setHomePath();
 	setCurrentPath();
 	setActualHome();
-	previousPath = newString();
 	setUsername();
 	setSystemName();
+	previousPath = newString();
 	stringCopy(previousPath, *currentPath);
+	initProcessList();
 }
 
 int isNumber(String *number) {
