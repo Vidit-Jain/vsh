@@ -50,9 +50,6 @@ void stringCopy(String *dest, String src) {
 	dest->length = src.length;
 }
 
-String *substring(String str, unsigned int startIndex,
-				  unsigned int numberOfCharacters) {}
-
 String *initString(const char *str) {
 	unsigned int stringLength = strlen(str);
 	String *filledString;
@@ -68,11 +65,6 @@ String *initString(const char *str) {
 
 unsigned int isEqualString(String str1, String str2) {
 	return strcmp(str1.str, str2.str) == 0;
-}
-
-void emptyString(String *str) {
-	str->str[0] = '\0';
-	str->length = 0;
 }
 
 void concatenate(String *str1, String *str2) {

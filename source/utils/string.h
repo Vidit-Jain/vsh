@@ -15,10 +15,7 @@ struct string {
 String *newString();
 String *newStringCustom(unsigned int size);
 void stringCopy(String *dest, String src);
-String *substring(String str, unsigned int startIndex,
-				  unsigned int numberOfCharacters);
 String *initString(const char *str);
-void emptyString(String *str);
 void updateLength(String *str);
 void concatenate(String *str1, String *str2);
 unsigned int isEqualString(String str1, String str2);

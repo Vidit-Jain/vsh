@@ -3,10 +3,9 @@
 #include "source/utils/string.h"
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
-extern unsigned int homePathDepth;
+
 extern String *homePath;
 
-extern unsigned int currentPathDepth;
 extern String *currentPath;
 
 extern String *displayPath;

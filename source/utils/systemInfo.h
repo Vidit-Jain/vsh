@@ -13,7 +13,6 @@ void setUsername();
 void setSystemName();
 String *setHomePath();
 String *setCurrentPath();
-unsigned int getDepth(String path);
 unsigned int inHomeDirectory(String *path);
 String *shortenPath(String *path);
 String *expandPath(String *path);
