@@ -29,14 +29,24 @@ void exec(TokenArray *tokens) {
 		for (int i = 0; i < tokens->argCount; i++) {
 			args[i] = tokens->args[i]->str;
 		}
+        setpgid(0, 0);
 		args[tokens->argCount] = NULL;
 		execvp(tokens->args[0]->str, args);
 		errorHandler(GENERAL_NONFATAL);
 		exit(0);
 	} else {
 		if (!isBackground) { // Wait if not background process
+            signal(SIGTTOU, SIG_IGN);
+            signal(SIGTTOU, SIG_IGN);
+            tcsetpgrp(STDIN_FILENO, childId);
+
 			int status;
 			wait(&status);
+            waitpid(childId, &status, WUNTRACED);
+
+            tcsetpgrp(STDIN_FILENO, getpgrp());
+            signal(SIGTTOU, SIG_DFL);
+            signal(SIGTTOU, SIG_DFL);
 		} else {
 			printf("%d\n", childId);
 			// Add child process to linked list of currently running processes
