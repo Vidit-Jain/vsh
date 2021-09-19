@@ -1,5 +1,7 @@
 #include "utils.h"
 
+struct termios orig_termios;
+
 void initInfo() {
 	setHomePath();
 	setCurrentPath();
@@ -12,6 +14,17 @@ void initInfo() {
 	initHistory();
 }
 
+void eraseInput(String *input) {
+	while (input->length != 0) {
+		if (input->str[input->length - 1] == 9) {
+			for (int i = 0; i < 7; i++)
+				printf("\b");
+		}
+		printf("\b \b");
+		input->length--;
+	}
+	input->str[0] = '\0';
+}
 int isNumber(String *number) {
 	for (int i = 0; i < number->length; i++) {
 		if (number->str[i] < '0' || number->str[i] > '9')
@@ -53,4 +66,24 @@ String *getGroup(gid_t gid) {
 	if (user == NULL)
 		errorHandler(GENERAL_FATAL);
 	return initString(user->gr_name);
+}
+
+void die(const char *s) {
+	perror(s);
+	exit(1);
+}
+
+void disableRawMode() {
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
+		die("tcsetattr");
+}
+
+void enableRawMode() {
+	if (tcgetattr(STDIN_FILENO, &orig_termios) == -1)
+		die("tcgetattr");
+	atexit(disableRawMode);
+	struct termios raw = orig_termios;
+	raw.c_lflag &= ~(ICANON | ECHO);
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1)
+		die("tcsetattr");
 }
