@@ -9,5 +9,6 @@
 #include <stdio.h>
 
 #include "../utils/string.h"
+#include "runningProcesses.h"
 void errorHandler(int code);
 #endif // VSH_ERRORHANDLING_H
