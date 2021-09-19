@@ -1,6 +1,6 @@
 #ifndef VSH_HISTORY_H
 #define VSH_HISTORY_H
-#include "../../globals.h"
+#include "../globals.h"
 #include "../processor/errorHandling.h"
 #include "../utils/string.h"
 #include "../utils/tokenArray.h"

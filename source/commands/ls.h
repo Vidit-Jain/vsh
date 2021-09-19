@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 #include <time.h>
 
-#include "../../globals.h"
+#include "../globals.h"
 #include "../processor/errorHandling.h"
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"

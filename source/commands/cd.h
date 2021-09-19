@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "../../globals.h"
+#include "../globals.h"
 #include "../processor/errorHandling.h"
 #include "../utils/systemInfo.h"
 #include "../utils/tokenArray.h"

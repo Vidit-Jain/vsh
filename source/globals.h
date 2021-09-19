@@ -1,6 +1,6 @@
 #ifndef VSH_GLOBALS_H
 #define VSH_GLOBALS_H
-#include "source/utils/string.h"
+#include "utils/string.h"
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
 

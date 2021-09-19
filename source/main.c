@@ -1,10 +1,10 @@
 #include <ctype.h>
-#include "source/commands/history.h"
-#include "source/processor/execute.h"
-#include "source/processor/prompt.h"
-#include "source/processor/signalHandling.h"
-#include "source/utils/tokenArray.h"
-#include "source/utils/utils.h"
+#include "commands/history.h"
+#include "processor/execute.h"
+#include "processor/prompt.h"
+#include "processor/signalHandling.h"
+#include "utils/tokenArray.h"
+#include "utils/utils.h"
 int main() {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGCHLD, child_handler);
