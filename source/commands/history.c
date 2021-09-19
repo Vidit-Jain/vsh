@@ -6,11 +6,11 @@ int currentHistoryIndex = -1;
 void createFile(char *name) {
 	FILE *fp = fopen(name, "r");
 	if (fp == NULL) {
-        fp = fopen(name, "w");
-        if (fp == NULL) {
-            errorHandler(GENERAL_NONFATAL);
-            return;
-        }
+		fp = fopen(name, "w");
+		if (fp == NULL) {
+			errorHandler(GENERAL_NONFATAL);
+			return;
+		}
 		return;
 	}
 	if (fclose(fp) == EOF) {
@@ -81,23 +81,24 @@ void printHistory(int num) {
 		printf("%s\n", history[i]);
 	}
 }
-void resetHistoryIndex() {
-    currentHistoryIndex = -1;
-}
+void resetHistoryIndex() { currentHistoryIndex = -1; }
 void upArrow(String *input) {
-    if (currentHistoryIndex + 1 >= totalHistory) return;
-    eraseInput(input);
-    currentHistoryIndex++;
-    stringCopy(input, *initString(history[currentHistoryIndex]));
-    printf("%s", input->str);
+	if (currentHistoryIndex + 1 >= totalHistory)
+		return;
+	eraseInput(input);
+	currentHistoryIndex++;
+	stringCopy(input, *initString(history[currentHistoryIndex]));
+	printf("%s", input->str);
 }
 void downArrow(String *input) {
-    if (currentHistoryIndex < 0) return;
-    eraseInput(input);
-    currentHistoryIndex--;
-    if (currentHistoryIndex == -1) return;
-    stringCopy(input, *initString(history[currentHistoryIndex]));
-    printf("%s", input->str);
+	if (currentHistoryIndex < 0)
+		return;
+	eraseInput(input);
+	currentHistoryIndex--;
+	if (currentHistoryIndex == -1)
+		return;
+	stringCopy(input, *initString(history[currentHistoryIndex]));
+	printf("%s", input->str);
 }
 void commandHistory(TokenArray *tokens) {
 	if (tokens->argCount > 2) {
