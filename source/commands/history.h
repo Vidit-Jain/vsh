@@ -10,4 +10,7 @@
 void addHistory(String *command);
 void commandHistory(TokenArray *tokens);
 void initHistory();
+void upArrow(String *input);
+void downArrow(String *input);
+void resetHistoryIndex();
 #endif // VSH_HISTORY_H

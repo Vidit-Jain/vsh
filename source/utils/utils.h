@@ -2,6 +2,7 @@
 #define VSH_UTILS_H
 #include <grp.h>
 #include <sys/stat.h>
+#include <termios.h>
 
 #include "../commands/history.h"
 #include "../processor/errorHandling.h"
@@ -15,4 +16,7 @@ int folderExists(String path);
 int fileExists(String path);
 String *getUser(uid_t uid);
 String *getGroup(gid_t gid);
+void enableRawMode();
+void disableRawMode();
+void eraseInput(String *input);
 #endif // VSH_UTILS_H
