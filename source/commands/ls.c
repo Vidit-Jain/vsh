@@ -23,12 +23,23 @@ String *lastModified(time_t modifiedTime) {
 String *filePermissions(String *filePath) {
 	String *permissions = initString("----------");
 	struct stat fileStat;
-	if (stat(filePath->str, &fileStat) < 0) {
+	if (lstat(filePath->str, &fileStat) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return NULL;
 	}
 	if (S_ISDIR(fileStat.st_mode))
 		permissions->str[0] = 'd';
+	else if (S_ISBLK(fileStat.st_mode))
+		permissions->str[0] = 'b';
+	else if (S_ISFIFO(fileStat.st_mode))
+		permissions->str[0] = 'p';
+	else if (S_ISLNK(fileStat.st_mode))
+		permissions->str[0] = 'l';
+	else if (S_ISCHR(fileStat.st_mode))
+		permissions->str[0] = 'c';
+	else if (S_ISSOCK(fileStat.st_mode))
+		permissions->str[0] = 's';
+
 	int bits[3][3] = {{S_IRUSR, S_IWUSR, S_IXUSR},
 					  {S_IRGRP, S_IWGRP, S_IXGRP},
 					  {S_IROTH, S_IWOTH, S_IXOTH}};
@@ -60,7 +71,7 @@ long countBlocks(String *path, int countHidden) {
 		stringCopy(temp, *path);
 		concatenate(temp, initString("/"));
 		concatenate(temp, initString(dir->d_name));
-		if (stat(temp->str, &file) < 0) {
+		if (lstat(temp->str, &file) < 0) {
 			errorHandler(GENERAL_NONFATAL);
 			return -1;
 		}
