@@ -59,6 +59,8 @@ int main() {
 		}
 		disableRawMode();
 		input->str[input->length] = '\0';
+		if (input->length == 0)
+			continue;
 		addHistory(input);
 		executeLine(tokens, *input);
 	}
