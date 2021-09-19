@@ -1,7 +1,7 @@
 #include "tokenArray.h"
 
 const unsigned int MAX_ARGS = 256;
-
+// Creates new token array
 TokenArray *newTokenArray() {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
 	if (tokens == NULL)
@@ -14,6 +14,7 @@ TokenArray *newTokenArray() {
 	return tokens;
 }
 
+// Creates new token array with custom size
 TokenArray *newTokenArrayCustom(unsigned int size) {
 	TokenArray *tokens = (TokenArray *)malloc(sizeof(TokenArray));
 	if (tokens == NULL)
@@ -27,7 +28,7 @@ TokenArray *newTokenArrayCustom(unsigned int size) {
 	tokens->maxSize = size;
 	return tokens;
 }
-
+// Copy one token array and create a new copy
 TokenArray *duplicateTokenArray(TokenArray *tokens) {
 	TokenArray *duplicate = newTokenArrayCustom(tokens->maxSize);
 	duplicate->argCount = tokens->argCount;

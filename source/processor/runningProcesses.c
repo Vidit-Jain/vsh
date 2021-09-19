@@ -1,6 +1,7 @@
 #include "runningProcesses.h"
 Process *head;
 void initProcessList() { head = NULL; }
+// Create a process to be added into the list of running processes
 Process *createProcess(char *name, pid_t pid) {
 	Process *p = (Process *)malloc(sizeof(Process));
 	if (p == NULL)
@@ -14,12 +15,14 @@ Process *createProcess(char *name, pid_t pid) {
 	return p;
 }
 
+// Add a process to the list of running processes
 void addProcess(char *name, pid_t pid) {
 	Process *process = createProcess(name, pid);
 	process->nextProcess = head;
 	head = process;
 }
 
+// Given a pid, find the name of the process, return NULL if not found
 char *processName(pid_t pid) {
 	Process *traverse = head;
 	while (traverse != NULL) {
@@ -30,7 +33,7 @@ char *processName(pid_t pid) {
 	}
 	return NULL;
 }
-
+// Remove a process from list of processes
 void removeProcess(pid_t pid) {
 	if (head == NULL)
 		return;

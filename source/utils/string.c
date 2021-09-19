@@ -1,6 +1,7 @@
 #include "string.h"
 
 const unsigned int MAX_LEN = 256;
+// Initialize a new string
 String *newString() {
 	String *str1;
 	str1 = (String *)malloc(sizeof(String));
@@ -16,7 +17,7 @@ String *newString() {
 
 	return str1;
 }
-
+// Create a string with a custom size
 String *newStringCustom(unsigned int size) {
 	String *str1;
 	str1 = (String *)malloc(sizeof(String));
@@ -35,6 +36,7 @@ String *newStringCustom(unsigned int size) {
 	return str1;
 }
 
+// Copy one string into another
 void stringCopy(String *dest, String src) {
 
 	if (dest == NULL)
@@ -49,7 +51,7 @@ void stringCopy(String *dest, String src) {
 	strcpy(dest->str, src.str);
 	dest->length = src.length;
 }
-
+// Takes a char* and copies the string and creates a String
 String *initString(const char *str) {
 	unsigned int stringLength = strlen(str);
 	String *filledString;
@@ -62,11 +64,11 @@ String *initString(const char *str) {
 	filledString->length = stringLength;
 	return filledString;
 }
-
+// Checks if two strings are equal
 unsigned int isEqualString(String str1, String str2) {
 	return strcmp(str1.str, str2.str) == 0;
 }
-
+// Concatenate one string to another
 void concatenate(String *str1, String *str2) {
 	if (str1->length + str2->length + 1 > str1->maxSize) {
 		String *temp = initString(str1->str);
@@ -77,4 +79,5 @@ void concatenate(String *str1, String *str2) {
 	updateLength(str1);
 }
 
+// Update string->length variable
 void updateLength(String *str) { str->length = strlen(str->str); }

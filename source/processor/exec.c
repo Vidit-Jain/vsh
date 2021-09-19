@@ -1,9 +1,10 @@
 #include "exec.h"
+// Checks tokens to see if process is to be run in background
 int isBackgroundProcess(TokenArray *tokens) {
 	String *lastToken = tokens->args[tokens->argCount - 1];
 	return lastToken->str[lastToken->length - 1] == '&';
 }
-
+// Executes set of tokens received using execvp and fork
 void exec(TokenArray *tokens) {
 	int isBackground = isBackgroundProcess(tokens);
 	if (isBackground) {
@@ -22,6 +23,7 @@ void exec(TokenArray *tokens) {
 		return;
 	}
 	if (childId == 0) {
+        // Child process should terminate on SIGINT
 		signal(SIGINT, sigint_handler);
 		char *args[tokens->argCount + 1];
 		for (int i = 0; i < tokens->argCount; i++) {
@@ -32,12 +34,14 @@ void exec(TokenArray *tokens) {
 		errorHandler(GENERAL_NONFATAL);
 		exit(0);
 	} else {
-		if (!isBackground) {
+		if (!isBackground) { // Wait if not background process
 			int status;
 			wait(&status);
 		} else {
 			printf("%d\n", childId);
+            // Add child process to linked list of currently running processes
 			addProcess(tokens->args[0]->str, childId);
+
 		}
 	}
 }

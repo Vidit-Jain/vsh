@@ -1,5 +1,9 @@
 #include "ls.h"
 
+/* Returns a string for the last modified time
+ * Gives the year instead of 24hr time if it's
+ * been more than 6 months
+ */
 String *lastModified(time_t modifiedTime) {
 	String *date = newString();
 
@@ -19,7 +23,10 @@ String *lastModified(time_t modifiedTime) {
 	updateLength(date);
 	return date;
 }
-
+/* Returns us a 10 character string
+ * to display the file permissions
+ * of the form "drwx--xrw-"
+ */
 String *filePermissions(String *filePath) {
 	String *permissions = initString("----------");
 	struct stat fileStat;
@@ -52,7 +59,7 @@ String *filePermissions(String *filePath) {
 	}
 	return permissions;
 }
-
+// Count the number of blocks occupied by files in directory
 long countBlocks(String *path, int countHidden) {
 	DIR *directory;
 	struct dirent *dir;
@@ -83,7 +90,13 @@ long countBlocks(String *path, int countHidden) {
 	}
 	return count / 2;
 }
-
+/* Find max number of characters taken by:
+ * 1. links
+ * 2. username length
+ * 3. groupname length
+ * 4. bytes occupied
+ * To be able to print the ls -l output in aligned manner
+ */
 int findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
 				   unsigned int *maxUserLength, unsigned int *maxGroupLength,
 				   unsigned int *maxByteSize) {
@@ -136,7 +149,10 @@ int findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
 	}
 	return 0;
 }
-
+/* Check the flags passed by the user
+ * -l - Verbose ls
+ * -a - Show hidden files
+ */
 int checkFlags(TokenArray *tokens) {
 	char *args[tokens->argCount];
 	for (int i = 0; i < tokens->argCount; i++) {
@@ -160,7 +176,9 @@ int checkFlags(TokenArray *tokens) {
 	optind = 0;
 	return flags;
 }
-
+/* Count number of paths to figure out if we need to display
+ * name before printing contents of directories
+ */
 int countPaths(TokenArray *tokens) {
 	int pathCount = 0;
 	for (int i = 1; i < tokens->argCount; i++) {
@@ -168,8 +186,9 @@ int countPaths(TokenArray *tokens) {
 	}
 	return pathCount;
 }
-
+// Prints a file name
 void listFile(char *fileName) { printf("%s\n", fileName); }
+// Prints a file's details
 void listFileVerbose(String *path, char *fileName, char *buf) {
 	struct stat file;
 	if (stat(path->str, &file) < 0) {
@@ -189,6 +208,10 @@ void listFileVerbose(String *path, char *fileName, char *buf) {
 	printf(buf, permissions->str, file.st_nlink, userOwner->str,
 		   groupOwner->str, file.st_size, date->str, fileName);
 }
+
+/* List all the directories. If -a if passed, showHidden = 1,
+ * which means to check hidden files as well
+ */
 void listDirectories(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
 		errorHandler(GENERAL_NONFATAL);
@@ -219,6 +242,10 @@ void listDirectories(String *path, int showHidden, int displayName) {
 		return;
 	}
 }
+/* List all directory contents verbosely
+ * If -a passed, showHidden = 1, which means
+ * to check hidden files as well
+ */
 void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 	if (!folderExists(*path)) {
 		errorHandler(GENERAL_NONFATAL);
@@ -272,7 +299,7 @@ void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 
 void commandLS(TokenArray *tokens) {
 	int flags = checkFlags(tokens);
-	if (flags == -1)
+	if (flags == -1) // Some error occurred
 		return;
 
 	int pathCount = countPaths(tokens);

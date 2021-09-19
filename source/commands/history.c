@@ -2,7 +2,7 @@
 char *history[MAX_HISTORY];
 int totalHistory;
 int currentHistoryIndex = -1;
-
+// Creates a file if it hasn't been created
 void createFile(char *name) {
 	FILE *fp = fopen(name, "r");
 	if (fp == NULL) {
@@ -18,6 +18,7 @@ void createFile(char *name) {
 		return;
 	}
 }
+// Initializes all the history related variables on startup
 void initHistory() {
 	totalHistory = 0;
 	String *historyPath = newString();
@@ -44,6 +45,7 @@ void initHistory() {
 			break;
 	}
 }
+// Adds a command to history
 void addHistory(String *command) {
 	String *historyPath = newString();
 	// Using $HOME for common vsh_history for all shell calls
@@ -75,13 +77,19 @@ void addHistory(String *command) {
 		return;
 	}
 }
+// Print the history of commands
 void printHistory(int num) {
 	num = MIN(num, totalHistory);
 	for (int i = num - 1; i >= 0; i--) {
 		printf("%s\n", history[i]);
 	}
 }
+/* Reset the history index for arrow key navigation after
+ * the user has executed a command
+ */
 void resetHistoryIndex() { currentHistoryIndex = -1; }
+
+// Allows you to go back in history to execute a command previously executed before
 void upArrow(String *input) {
 	if (currentHistoryIndex + 1 >= totalHistory)
 		return;
@@ -90,6 +98,7 @@ void upArrow(String *input) {
 	stringCopy(input, *initString(history[currentHistoryIndex]));
 	printf("%s", input->str);
 }
+// Allows you more navigation, to move around in history of commands executed.
 void downArrow(String *input) {
 	if (currentHistoryIndex < 0)
 		return;
@@ -100,12 +109,15 @@ void downArrow(String *input) {
 	stringCopy(input, *initString(history[currentHistoryIndex]));
 	printf("%s", input->str);
 }
+
 void commandHistory(TokenArray *tokens) {
+    // Incorrect number of arguments
 	if (tokens->argCount > 2) {
 		errorHandler(INCORRECT_ARGC);
 		return;
 	}
 	if (tokens->argCount == 2) {
+        // Invalid argument
 		if (!isNumber(tokens->args[1])) {
 			errorHandler(INVALID_ARGS);
 			return;
@@ -115,5 +127,6 @@ void commandHistory(TokenArray *tokens) {
 			return;
 		printHistory(num);
 	} else
+        // By default print 10
 		printHistory(10);
 }

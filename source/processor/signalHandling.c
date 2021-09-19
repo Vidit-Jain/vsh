@@ -1,5 +1,10 @@
 #include "signalHandling.h"
+// Terminate child process`
 void sigint_handler() { exit(0); }
+
+/* On child termination find the child process nameo
+ * and print that the process has finished execution
+ */
 void child_handler() {
 	int code;
 	pid_t pid;

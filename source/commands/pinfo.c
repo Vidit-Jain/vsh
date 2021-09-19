@@ -1,12 +1,12 @@
 #include "pinfo.h"
-
+// Returns whether process is in foreground or background
 int isForeground(pid_t pid) {
 	pid_t pgid = getpgid(pid);
 	if (getpgid(pid) == -1)
 		return -1;
 	return pgid == pid;
 }
-
+// Checks /proc/<pid>/exe to find the executable path of the process
 String *getExecutablePath(pid_t pid) {
 	String *actualPath = newString();
 	String *procPath = newString();
@@ -19,7 +19,7 @@ String *getExecutablePath(pid_t pid) {
 	updateLength(actualPath);
 	return actualPath;
 }
-
+// Gets state of process from /proc/<pid>/stat
 String *getState(pid_t pid) {
 	String *fileName = newString();
 	sprintf(fileName->str, "/proc/%d/stat", pid);
@@ -36,7 +36,7 @@ String *getState(pid_t pid) {
 	updateLength(state);
 	return state;
 }
-
+// Finds virtual memory used through /proc/<pid>/stat
 unsigned long getVirtualMemorySize(pid_t pid) {
 	String *fileName = newString();
 	sprintf(fileName->str, "/proc/%d/stat", pid);
@@ -54,7 +54,7 @@ unsigned long getVirtualMemorySize(pid_t pid) {
 	unsigned long totalSize = toNumber(state);
 	return totalSize / 1024;
 }
-
+// Prints pinfo of a process specified
 void pinfo(pid_t pid) {
 	printf("pid -- %d\n", pid);
 	if (isForeground(pid) == -1) {
@@ -70,7 +70,7 @@ void pinfo(pid_t pid) {
 	unsigned long memorySize = getVirtualMemorySize(pid);
 	if (memorySize == -1)
 		return;
-	printf("memory -- %lu\n", memorySize);
+	printf("memory -- %lu kb\n", memorySize);
 
 	String *executablePath = getExecutablePath(pid);
 	if (executablePath == NULL)
@@ -80,7 +80,7 @@ void pinfo(pid_t pid) {
 }
 
 void commandPinfo(TokenArray *tokens) {
-	pid_t pid = getpid();
+	pid_t pid = getpid(); // Default if no argument is passed
 
 	if (tokens->argCount > 2) {
 		errorHandler(INCORRECT_ARGC);

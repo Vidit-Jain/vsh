@@ -3,7 +3,7 @@
 unsigned int isCommand(TokenArray *tokens, String str) {
 	return isEqualString(*tokens->args[0], str);
 }
-
+// Checks the first command and executes the appropriate command
 void executeCommand(TokenArray *tokens) {
 	if (tokens->argCount == 0)
 		return;
@@ -22,6 +22,10 @@ void executeCommand(TokenArray *tokens) {
 	} else if (isCommand(tokens, *initString("exit"))) {
 		exit(1);
 	} else if (isCommand(tokens, *initString("repeat"))) {
+        /* If repeat is called, the first two commands are removed
+         * and the rest of the command is executed multiple times in a loop
+         */
+
 		int repeats = commandRepeat(tokens);
 		if (repeats == -1) {
 			return;
@@ -39,7 +43,7 @@ void executeCommand(TokenArray *tokens) {
 		exec(tokens);
 	}
 }
-
+// Tokenize the input by the ; to execute multiple commands.
 void executeLine(TokenArray *tokens, String input) {
 	char *currentCommand;
 	String *parseInput = initString(input.str);
