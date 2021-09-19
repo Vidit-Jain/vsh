@@ -33,6 +33,14 @@ char *processName(pid_t pid) {
 	}
 	return NULL;
 }
+void exitShell() {
+    while (head != NULL) {
+        pid_t pid = head->pid;
+        kill(pid, SIGTERM);
+        removeProcess(pid);
+    }
+    exit(0);
+}
 // Remove a process from list of processes
 void removeProcess(pid_t pid) {
 	if (head == NULL)
