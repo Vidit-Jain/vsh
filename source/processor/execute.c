@@ -22,9 +22,9 @@ void executeCommand(TokenArray *tokens) {
 	} else if (isCommand(tokens, *initString("exit"))) {
 		exit(1);
 	} else if (isCommand(tokens, *initString("repeat"))) {
-        /* If repeat is called, the first two commands are removed
-         * and the rest of the command is executed multiple times in a loop
-         */
+		/* If repeat is called, the first two commands are removed
+		 * and the rest of the command is executed multiple times in a loop
+		 */
 
 		int repeats = commandRepeat(tokens);
 		if (repeats == -1) {

@@ -89,7 +89,8 @@ void printHistory(int num) {
  */
 void resetHistoryIndex() { currentHistoryIndex = -1; }
 
-// Allows you to go back in history to execute a command previously executed before
+// Allows you to go back in history to execute a command previously executed
+// before
 void upArrow(String *input) {
 	if (currentHistoryIndex + 1 >= totalHistory)
 		return;
@@ -111,13 +112,13 @@ void downArrow(String *input) {
 }
 
 void commandHistory(TokenArray *tokens) {
-    // Incorrect number of arguments
+	// Incorrect number of arguments
 	if (tokens->argCount > 2) {
 		errorHandler(INCORRECT_ARGC);
 		return;
 	}
 	if (tokens->argCount == 2) {
-        // Invalid argument
+		// Invalid argument
 		if (!isNumber(tokens->args[1])) {
 			errorHandler(INVALID_ARGS);
 			return;
@@ -127,6 +128,6 @@ void commandHistory(TokenArray *tokens) {
 			return;
 		printHistory(num);
 	} else
-        // By default print 10
+		// By default print 10
 		printHistory(10);
 }

@@ -73,16 +73,16 @@ String *getGroup(gid_t gid) {
 // Disable rawmode to gain more control over the terminal
 void disableRawMode() {
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &default_teminal) == -1)
-        errorHandler(GENERAL_FATAL);
+		errorHandler(GENERAL_FATAL);
 }
 // Enables rawmode to gain more control over the terminal
 void enableRawMode() {
 	if (tcgetattr(STDIN_FILENO, &default_teminal) == -1)
-        errorHandler(GENERAL_FATAL);
-    atexit(disableRawMode);
+		errorHandler(GENERAL_FATAL);
+	atexit(disableRawMode);
 	struct termios rawInput = default_teminal;
 	rawInput.c_lflag &= ~(ICANON | ECHO);
 
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &rawInput) == -1)
-        errorHandler(GENERAL_FATAL);
+		errorHandler(GENERAL_FATAL);
 }

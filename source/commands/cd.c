@@ -5,7 +5,8 @@ void changeDirectory(TokenArray *tokens) {
 		stringCopy(previousPath, *currentPath);
 		stringCopy(currentPath, *homePath);
 		goToCurrentPath();
-	} else if (isEqualString(*tokens->args[1], *initString("-"))) { // Goto previous path
+	} else if (isEqualString(*tokens->args[1],
+							 *initString("-"))) { // Goto previous path
 		String *temp = newString();
 		stringCopy(temp, *currentPath);
 		stringCopy(currentPath, *previousPath);
@@ -23,7 +24,7 @@ void changeDirectory(TokenArray *tokens) {
 }
 
 void commandCD(TokenArray *tokens) {
-    // > 2 args aren't allowed (first arg being cd)
+	// > 2 args aren't allowed (first arg being cd)
 	if (tokens->argCount > 2) {
 		errorHandler(INCORRECT_ARGC);
 		return;

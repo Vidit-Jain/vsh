@@ -23,7 +23,7 @@ void exec(TokenArray *tokens) {
 		return;
 	}
 	if (childId == 0) {
-        // Child process should terminate on SIGINT
+		// Child process should terminate on SIGINT
 		signal(SIGINT, sigint_handler);
 		char *args[tokens->argCount + 1];
 		for (int i = 0; i < tokens->argCount; i++) {
@@ -39,9 +39,8 @@ void exec(TokenArray *tokens) {
 			wait(&status);
 		} else {
 			printf("%d\n", childId);
-            // Add child process to linked list of currently running processes
+			// Add child process to linked list of currently running processes
 			addProcess(tokens->args[0]->str, childId);
-
 		}
 	}
 }
