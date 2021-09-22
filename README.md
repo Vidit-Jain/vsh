@@ -70,3 +70,35 @@ The `history` command allows to see your history of commands (upto 20).
 If no argument is passed, it'll print the last 10 commands used (not showing consecutively repeated commands)
 Else, it's print the number of commands as specified by the argument, upto a maximum of 20 commands.
 You can also cycle through your history by pressing the Up or Down arrow key to execute previously ran commands again.
+## File Structure
+```
+vsh/
+    Makefile - Contains makefile
+    README.md - Contains description of commands and file structure
+    vsh - The executable
+    source/
+        main.c      - Has the main function of the shell 
+        globals.c - Has the global variables and constants
+        commands/
+            cd.c    - has functions used to implement cd
+            echo.c  - has functions used to implement echo
+            history.c - has functions used to impelement history
+            ls.c    - has functions used to implement history
+            pinfo.c - has functions use to implement pinfo
+            pwd.c - has functions use to implement pwd
+            repeat.c - has functions use to implement repeat
+        processor/
+            errorHandling.c - Handles errors in program
+            exec.c  - Does the forking for running system commands
+            execute.c - Runs the command passed by user
+            prompt.c - Prints the prompt
+            runningProcess.c - Keeps a list of running processes
+            signalHandling.c - Contains the signal handlers used
+            tokenize.c - Tokenizes the given input
+        utils/
+            string.c - Implements string data structure
+            systemInfo.c - Has functions to get various information from system
+            tokenArray.c - Implements array of strings
+            utils.c - Misc functions used in program
+
+```
