@@ -4,6 +4,9 @@
 #define RESET "\033[0m"
 // Print the prompt username, systemname and current directory
 void printPrompt() {
+	if (displayPath != NULL)
+		free(displayPath->str);
+	free(displayPath);
 	displayPath = shortenPath(currentPath);
 	printf(GREEN "<%s@%s:" BLUE "%s" GREEN "> " RESET, username->str,
 		   systemName->str, displayPath->str);

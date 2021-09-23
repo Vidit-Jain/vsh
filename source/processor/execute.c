@@ -1,27 +1,27 @@
 #include "execute.h"
 
-unsigned int isCommand(TokenArray *tokens, String str) {
-	return isEqualString(*tokens->args[0], str);
+unsigned int isCommand(TokenArray *tokens, char* str) {
+	return strcmp(tokens->args[0]->str, str) == 0;
 }
 // Checks the first command and executes the appropriate command
 void executeCommand(TokenArray *tokens) {
 	if (tokens->argCount == 0)
 		return;
-	else if (isCommand(tokens, *initString("cd"))) {
+	else if (isCommand(tokens, "cd")) {
 		commandCD(tokens);
-	} else if (isCommand(tokens, *initString("echo"))) {
+	} else if (isCommand(tokens, "echo")) {
 		commandEcho(tokens);
-	} else if (isCommand(tokens, *initString("pwd"))) {
+	} else if (isCommand(tokens, "pwd")) {
 		commandPWD(tokens);
-	} else if (isCommand(tokens, *initString("ls"))) {
+	} else if (isCommand(tokens, "ls")) {
 		commandLS(tokens);
-	} else if (isCommand(tokens, *initString("pinfo"))) {
+	} else if (isCommand(tokens, "pinfo")) {
 		commandPinfo(tokens);
-	} else if (isCommand(tokens, *initString("history"))) {
+	} else if (isCommand(tokens, "history")) {
 		commandHistory(tokens);
-	} else if (isCommand(tokens, *initString("exit"))) {
+	} else if (isCommand(tokens, "exit")) {
 		exitShell();
-	} else if (isCommand(tokens, *initString("repeat"))) {
+	} else if (isCommand(tokens, "repeat")) {
 		/* If repeat is called, the first two commands are removed
 		 * and the rest of the command is executed multiple times in a loop
 		 */
@@ -38,6 +38,13 @@ void executeCommand(TokenArray *tokens) {
 		for (int i = 0; i < repeats; i++) {
 			TokenArray *tokenCopy = duplicateTokenArray(tokenReduced);
 			executeCommand(tokenCopy);
+			for (int j = 0; j < tokenCopy->maxSize; j++) {
+				if (tokenCopy->args[j] != NULL) {
+					free(tokenCopy->args[j]->str);
+					free(tokenCopy->args[j]);
+				}
+			}
+			free(tokenCopy);
 		}
 	} else {
 		exec(tokens);
@@ -47,9 +54,12 @@ void executeCommand(TokenArray *tokens) {
 void executeLine(TokenArray *tokens, String input) {
 	char *currentCommand;
 	String *parseInput = initString(input.str);
+	char* tempStore = parseInput->str;
 	while (
 		(currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
-		tokenizeCommand(tokens, *initString(currentCommand));
+		tokenizeCommand(tokens, currentCommand);
 		executeCommand(tokens);
 	}
+	free(tempStore);
+	free(parseInput);
 }

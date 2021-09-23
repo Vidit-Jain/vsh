@@ -58,7 +58,7 @@ int main() {
 					input->str[input->length++] = inputCharacter;
 					for (int i = 0; i < 8; i++) // Print 8 spaces
 						printf(" ");
-				} else if (inputCharacter == 4) { // 4 == End of transmission
+				} else if (inputCharacter == 4) { // 4 == End of File
 					exitShell();
 				} else { // Unhandled control sequence, can just print, don't
 						 // store in input

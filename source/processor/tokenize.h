@@ -3,5 +3,5 @@
 #include "../utils/string.h"
 #include "../utils/systemInfo.h"
 #include "../utils/tokenArray.h"
-void tokenizeCommand(TokenArray *tokens, String input);
+void tokenizeCommand(TokenArray *tokens, char *input);
 #endif // VSH_TOKENIZE_H

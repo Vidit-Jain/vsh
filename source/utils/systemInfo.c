@@ -17,6 +17,9 @@ void setSystemName() {
 }
 // Find actual home of user
 void setActualHome() {
+	if (actualHome != NULL)
+		free(actualHome->str);
+	free(actualHome);
 	actualHome = newString();
 	if ((actualHome->str = getenv("HOME")) == NULL) {
 		actualHome->str = getpwuid(getuid())->pw_dir;

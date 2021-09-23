@@ -30,6 +30,7 @@ void initHistory() {
 		return;
 	}
 	for (int i = 0; i < MAX_HISTORY; i++) {
+		free(history[i]);
 		history[i] = (char *)malloc(MAX_COMMAND_SIZE * sizeof(char));
 		if (history[i] == NULL)
 			errorHandler(BAD_MALLOC);
@@ -44,6 +45,8 @@ void initHistory() {
 		if (totalHistory == MAX_HISTORY)
 			break;
 	}
+	free(historyPath->str);
+	free(historyPath);
 }
 // Adds a command to history
 void addHistory(String *command) {
@@ -76,6 +79,8 @@ void addHistory(String *command) {
 		errorHandler(GENERAL_NONFATAL);
 		return;
 	}
+	free(historyPath->str);
+	free(historyPath);
 }
 // Print the history of commands
 void printHistory(int num) {

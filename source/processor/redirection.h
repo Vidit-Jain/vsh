@@ -1,0 +1,4 @@
+#ifndef VSH_REDIRECTION_H
+#define VSH_REDIRECTION_H
+
+#endif // VSH_REDIRECTION_H
