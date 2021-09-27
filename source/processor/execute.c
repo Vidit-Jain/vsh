@@ -1,6 +1,6 @@
 #include "execute.h"
 
-unsigned int isCommand(TokenArray *tokens, char* str) {
+unsigned int isCommand(TokenArray *tokens, char *str) {
 	return strcmp(tokens->args[0]->str, str) == 0;
 }
 // Checks the first command and executes the appropriate command
@@ -54,11 +54,32 @@ void executeCommand(TokenArray *tokens) {
 void executeLine(TokenArray *tokens, String input) {
 	char *currentCommand;
 	String *parseInput = initString(input.str);
-	char* tempStore = parseInput->str;
+	char *tempStore = parseInput->str;
 	while (
 		(currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
 		tokenizeCommand(tokens, currentCommand);
+		String *inputFile = NULL, *outputFile = NULL;
+		int outputStyle = 0;
+		if (parseRedirection(tokens, &inputFile, &outputFile, &outputStyle) <
+			0) {
+			fprintf(stderr, "\033[0;31m");
+			fprintf(stderr, "Error while parsing command\n");
+			fprintf(stderr, "\033[0m");
+			return;
+		}
+		if (outputFile != NULL) {
+			if (setOutputRedirect(outputFile, outputStyle) < 0) {
+				return;
+			}
+		}
+		if (inputFile != NULL) {
+			if (setInputRedirect(inputFile) < 0) {
+				return;
+			}
+		}
 		executeCommand(tokens);
+		resetOutputRedirect();
+		resetInputRedirect();
 	}
 	free(tempStore);
 	free(parseInput);

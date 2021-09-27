@@ -9,6 +9,8 @@
 #include "../commands/repeat.h"
 #include "../utils/tokenArray.h"
 #include "exec.h"
+#include "parsing.h"
+#include "redirection.h"
 #include "tokenize.h"
 void executeLine(TokenArray *tokens, String input);
 #endif // VSH_EXECUTE_H

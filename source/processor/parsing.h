@@ -2,5 +2,6 @@
 #define VSH_PARSING_H
 #include "../utils/string.h"
 #include "../utils/tokenArray.h"
-int checkRedirection(String **inputFile, String **outputFile, TokenArray *tokens);
-#endif //VSH_PARSING_H
+int parseRedirection(TokenArray *tokens, String **inputFile,
+					 String **outputFile, int *outputStyle);
+#endif // VSH_PARSING_H
