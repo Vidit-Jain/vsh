@@ -37,7 +37,7 @@ void exec(TokenArray *tokens) {
 	} else {
 		if (!isBackground) { // Wait if not background process
             signal(SIGTTOU, SIG_IGN);
-            signal(SIGTTOU, SIG_IGN);
+            signal(SIGTTIN, SIG_IGN);
             tcsetpgrp(STDIN_FILENO, childId);
 
 			int status;
@@ -46,7 +46,7 @@ void exec(TokenArray *tokens) {
 
             tcsetpgrp(STDIN_FILENO, getpgrp());
             signal(SIGTTOU, SIG_DFL);
-            signal(SIGTTOU, SIG_DFL);
+            signal(SIGTTIN, SIG_DFL);
 		} else {
 			printf("%d\n", childId);
 			// Add child process to linked list of currently running processes
