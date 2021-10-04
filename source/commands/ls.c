@@ -153,7 +153,7 @@ int findMaxLengths(String *path, int showHidden, unsigned int *maxLinks,
  * -l - Verbose ls
  * -a - Show hidden files
  */
-int checkFlags(TokenArray *tokens) {
+int checkFlagsLs(TokenArray *tokens) {
 	char *args[tokens->argCount];
 	for (int i = 0; i < tokens->argCount; i++) {
 		args[i] = tokens->args[i]->str;
@@ -209,7 +209,7 @@ void listFileVerbose(String *path, char *fileName, char *buf) {
 		   groupOwner->str, file.st_size, date->str, fileName);
 }
 
-/* List all the directories. If -a if passed, showHidden = 1,
+/* List all the directories. If -a is passed, showHidden = 1,
  * which means to check hidden files as well
  */
 void listDirectories(String *path, int showHidden, int displayName) {
@@ -298,7 +298,7 @@ void listDirectoriesVerbose(String *path, int showHidden, int displayName) {
 }
 
 void commandLS(TokenArray *tokens) {
-	int flags = checkFlags(tokens);
+	int flags = checkFlagsLs(tokens);
 	if (flags == -1) // Some error occurred
 		return;
 

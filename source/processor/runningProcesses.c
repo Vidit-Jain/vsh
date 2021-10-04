@@ -1,6 +1,8 @@
 #include "runningProcesses.h"
 Process *head;
+int totalProcesses = 0;
 void initProcessList() { head = NULL; }
+int getTotalProcesses() { return totalProcesses; }
 // Create a process to be added into the list of running processes
 Process *createProcess(char *name, pid_t pid) {
 	Process *p = (Process *)malloc(sizeof(Process));
@@ -20,6 +22,7 @@ void addProcess(char *name, pid_t pid) {
 	Process *process = createProcess(name, pid);
 	process->nextProcess = head;
 	head = process;
+	totalProcesses++;
 }
 
 // Given a pid, find the name of the process, return NULL if not found
@@ -49,6 +52,7 @@ void removeProcess(pid_t pid) {
 		Process *temp = head;
 		head = head->nextProcess;
 		free(temp);
+		totalProcesses--;
 		return;
 	}
 	Process *prev = head;
@@ -57,9 +61,27 @@ void removeProcess(pid_t pid) {
 		if (curr->pid == pid) {
 			prev->nextProcess = curr->nextProcess;
 			free(curr);
+			totalProcesses--;
 			break;
 		}
 		prev = curr;
 		curr = curr->nextProcess;
+	}
+}
+
+void currentProcesses(char* processNames[], pid_t ids[]) {
+	Process *traverse = head;
+	/* Filling the array in reverse as we enter processes like a stack in the
+	 * Linked list
+	 */
+	int index = totalProcesses - 1;
+	while (traverse != NULL) {
+		int nameLength = (int)strlen(traverse->name) + 1;
+		processNames[index] = (char*) malloc(nameLength * sizeof(char));
+		strcpy(processNames[index], traverse->name);
+
+		ids[index] = traverse->pid;
+		traverse = traverse->nextProcess;
+		index--;
 	}
 }

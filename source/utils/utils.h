@@ -19,4 +19,5 @@ String *getGroup(gid_t gid);
 void enableRawMode();
 void disableRawMode();
 void eraseInput(String *input);
+String *getState(pid_t pid);
 #endif // VSH_UTILS_H

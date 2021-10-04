@@ -19,23 +19,6 @@ String *getExecutablePath(pid_t pid) {
 	updateLength(actualPath);
 	return actualPath;
 }
-// Gets state of process from /proc/<pid>/stat
-String *getState(pid_t pid) {
-	String *fileName = newString();
-	sprintf(fileName->str, "/proc/%d/stat", pid);
-	FILE *fp = fopen(fileName->str, "rb");
-	if (fp == NULL) {
-		errorHandler(GENERAL_NONFATAL);
-		return NULL;
-	}
-	String *state = newString();
-	String *buffer = newString();
-	for (int i = 0; i < 2; i++)
-		fscanf(fp, "%s", buffer->str);
-	fscanf(fp, "%s", state->str);
-	updateLength(state);
-	return state;
-}
 // Finds virtual memory used through /proc/<pid>/stat
 unsigned long getVirtualMemorySize(pid_t pid) {
 	String *fileName = newString();

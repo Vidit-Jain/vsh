@@ -86,3 +86,20 @@ void enableRawMode() {
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &rawInput) == -1)
 		errorHandler(GENERAL_FATAL);
 }
+// Gets state of process from /proc/<pid>/stat
+String *getState(pid_t pid) {
+	String *fileName = newString();
+	sprintf(fileName->str, "/proc/%d/stat", pid);
+	FILE *fp = fopen(fileName->str, "rb");
+	if (fp == NULL) {
+		errorHandler(GENERAL_NONFATAL);
+		return NULL;
+	}
+	String *state = newString();
+	String *buffer = newString();
+	for (int i = 0; i < 2; i++)
+		fscanf(fp, "%s", buffer->str);
+	fscanf(fp, "%s", state->str);
+	updateLength(state);
+	return state;
+}
