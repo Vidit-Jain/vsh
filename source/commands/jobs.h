@@ -1,10 +1,10 @@
 #ifndef VSH_JOBS_H
 #define VSH_JOBS_H
-#include <stdlib.h>
-#include <string.h>
 #include "../processor/runningProcesses.h"
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"
+#include <stdlib.h>
+#include <string.h>
 typedef struct job Job;
 struct job {
 	char *name;
@@ -12,5 +12,5 @@ struct job {
 	int state;
 	pid_t pid;
 };
-void commandJobs(TokenArray* tokens);
+void commandJobs(TokenArray *tokens);
 #endif // VSH_JOBS_H
