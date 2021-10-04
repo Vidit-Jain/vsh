@@ -1,7 +1,7 @@
 #include "jobs.h"
 // Used to sort jobs alphabetically by command name
-int comparator(const void* a, const void* b) {
-	return strcmp(((Job*)a)->name, ((Job*)b)->name);
+int comparator(const void *a, const void *b) {
+	return strcmp(((Job *)a)->name, ((Job *)b)->name);
 }
 /* Flags
  * 1 - print running processes
@@ -28,14 +28,15 @@ int checkFlagsJobs(TokenArray *tokens) {
 			break;
 	}
 	optind = 0;
-	if (flags == 0) flags = 2;
+	if (flags == 0)
+		flags = 2;
 	return flags;
 }
 void printJobs(int flags) {
 
 	int totalProcesses = getTotalProcesses();
 
-	char* processNames[totalProcesses];
+	char *processNames[totalProcesses];
 	pid_t ids[totalProcesses];
 
 	currentProcesses(processNames, ids);
@@ -46,28 +47,33 @@ void printJobs(int flags) {
 		jobs[i].name = processNames[i];
 		jobs[i].job_no = i + 1;
 		jobs[i].pid = ids[i];
-		String* stateLetter = getState(jobs[i].pid);
+		String *stateLetter = getState(jobs[i].pid);
 		if (strcmp(stateLetter->str, "S") == 0) {
 			jobs[i].state = 0;
-		}
-		else jobs[i].state = 1;
+		} else
+			jobs[i].state = 1;
 	}
 
 	// Sorting the processes
-	qsort((void*) jobs, totalProcesses, sizeof(jobs[0]), comparator);
+	qsort((void *)jobs, totalProcesses, sizeof(jobs[0]), comparator);
 
 	// Printing the processes
 	for (int i = 0; i < totalProcesses; i++) {
 		// Print if we should print running processes.
 		if ((flags & 1) && jobs[i].state == 1)
-			printf("[%d] %s %s [%d]\n", jobs[i].job_no, jobs[i].state ? "Running" : "Stopped", jobs[i].name, jobs[i].pid);
+			printf("[%d] %s %s [%d]\n", jobs[i].job_no,
+				   jobs[i].state ? "Running" : "Stopped", jobs[i].name,
+				   jobs[i].pid);
 		// Print if we should print stopped processes.
 		if ((flags & 2) && jobs[i].state == 0)
-			printf("[%d] %s %s [%d]\n", jobs[i].job_no, jobs[i].state ? "Running" : "Stopped", jobs[i].name, jobs[i].pid);
+			printf("[%d] %s %s [%d]\n", jobs[i].job_no,
+				   jobs[i].state ? "Running" : "Stopped", jobs[i].name,
+				   jobs[i].pid);
 	}
 }
-void commandJobs(TokenArray* tokens) {
+void commandJobs(TokenArray *tokens) {
 	int flags = checkFlagsJobs(tokens);
-	if (flags == -1) return;
+	if (flags == -1)
+		return;
 	printJobs(flags);
 }

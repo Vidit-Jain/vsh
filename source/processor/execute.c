@@ -21,10 +21,11 @@ void executeCommand(TokenArray *tokens) {
 		commandHistory(tokens);
 	} else if (isCommand(tokens, "jobs")) {
 		commandJobs(tokens);
+	} else if (isCommand(tokens, "sig")) {
+		commandSig(tokens);
 	} else if (isCommand(tokens, "exit")) {
 		exitShell();
-	}
-	else if (isCommand(tokens, "repeat")) {
+	} else if (isCommand(tokens, "repeat")) {
 		/* If repeat is called, the first two commands are removed
 		 * and the rest of the command is executed multiple times in a loop
 		 */

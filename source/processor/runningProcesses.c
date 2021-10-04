@@ -69,7 +69,7 @@ void removeProcess(pid_t pid) {
 	}
 }
 
-void currentProcesses(char* processNames[], pid_t ids[]) {
+void currentProcesses(char *processNames[], pid_t ids[]) {
 	Process *traverse = head;
 	/* Filling the array in reverse as we enter processes like a stack in the
 	 * Linked list
@@ -77,7 +77,7 @@ void currentProcesses(char* processNames[], pid_t ids[]) {
 	int index = totalProcesses - 1;
 	while (traverse != NULL) {
 		int nameLength = (int)strlen(traverse->name) + 1;
-		processNames[index] = (char*) malloc(nameLength * sizeof(char));
+		processNames[index] = (char *)malloc(nameLength * sizeof(char));
 		strcpy(processNames[index], traverse->name);
 
 		ids[index] = traverse->pid;
