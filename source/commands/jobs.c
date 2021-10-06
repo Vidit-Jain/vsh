@@ -29,7 +29,7 @@ int checkFlagsJobs(TokenArray *tokens) {
 	}
 	optind = 0;
 	if (flags == 0)
-		flags = 2;
+		flags = 3;
 	return flags;
 }
 void printJobs(int flags) {
@@ -48,7 +48,7 @@ void printJobs(int flags) {
 		jobs[i].job_no = i + 1;
 		jobs[i].pid = ids[i];
 		String *stateLetter = getState(jobs[i].pid);
-		if (strcmp(stateLetter->str, "S") == 0) {
+		if (strcmp(stateLetter->str, "T") == 0) {
 			jobs[i].state = 0;
 		} else
 			jobs[i].state = 1;
