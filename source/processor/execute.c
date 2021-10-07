@@ -23,8 +23,10 @@ void executeCommand(TokenArray *tokens) {
 		commandJobs(tokens);
 	} else if (isCommand(tokens, "sig")) {
 		commandSig(tokens);
-	} else if (isCommand(tokens,"bg")) {
+	} else if (isCommand(tokens, "bg")) {
 		commandBg(tokens);
+	} else if (isCommand(tokens, "fg")) {
+		commandFg(tokens);
 	} else if (isCommand(tokens, "exit")) {
 		exitShell();
 	} else if (isCommand(tokens, "repeat")) {

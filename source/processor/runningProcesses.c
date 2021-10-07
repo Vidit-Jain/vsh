@@ -86,10 +86,12 @@ void currentProcesses(char *processNames[], pid_t ids[]) {
 	}
 }
 pid_t getJob(int job_no) {
+	// Checks if job_number exists
 	if (job_no > totalProcesses || job_no <= 0) {
 		return -1;
 	}
 	Process *traverse = head;
+	// Done numbering in reverse, hence we must do it this way
 	for (int i = 0; i < totalProcesses - job_no; i++) {
 		traverse = traverse->nextProcess;
 	}
