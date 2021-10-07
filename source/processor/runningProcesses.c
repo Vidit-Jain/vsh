@@ -85,3 +85,13 @@ void currentProcesses(char *processNames[], pid_t ids[]) {
 		index--;
 	}
 }
+pid_t getJob(int job_no) {
+	if (job_no > totalProcesses || job_no <= 0) {
+		return -1;
+	}
+	Process *traverse = head;
+	for (int i = 0; i < totalProcesses - job_no; i++) {
+		traverse = traverse->nextProcess;
+	}
+	return traverse->pid;
+}

@@ -2,7 +2,7 @@
 // Allows you to repeat a command multiple times
 int commandRepeat(TokenArray *tokens) {
 	if (tokens->argCount < 2) {
-		errorHandler(INCORRECT_ARGC);
+		errorHandler(INVALID_ARGCOUNT);
 		return -1;
 	}
 	if (!isNumber(tokens->args[1])) {

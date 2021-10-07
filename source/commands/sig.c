@@ -24,7 +24,7 @@ void sendSignal(int jobNumber, int signalNumber) {
 void commandSig(TokenArray *tokens) {
 	// Command must have exactly 3 arguments
 	if (tokens->argCount != 3) {
-		errorHandler(INCORRECT_ARGC);
+		errorHandler(INVALID_ARGCOUNT);
 		return;
 	}
 	// Check if both of the arguments are numbers

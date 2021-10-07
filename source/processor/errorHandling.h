@@ -4,7 +4,7 @@
 #define INVALID_SIZE 2
 #define GENERAL_FATAL 15
 #define GENERAL_NONFATAL 22
-#define INCORRECT_ARGC 23
+#define INVALID_ARGCOUNT 23
 #define INVALID_ARGS 24
 #include <stdio.h>
 

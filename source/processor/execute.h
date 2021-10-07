@@ -9,6 +9,7 @@
 #include "../commands/pwd.h"
 #include "../commands/repeat.h"
 #include "../commands/sig.h"
+#include "../commands/bg.h"
 #include "../utils/tokenArray.h"
 #include "exec.h"
 #include "parsing.h"
