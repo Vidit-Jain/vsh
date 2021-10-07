@@ -1,11 +1,11 @@
 #include "execute.h"
-#include <stdbool.h>
 
 unsigned int isCommand(TokenArray *tokens, char *str) {
 	return strcmp(tokens->args[0]->str, str) == 0;
 }
+
 // Checks the first command and executes the appropriate command
-void executeCommand(TokenArray *tokens, bool pipeInput, bool pipeOutput) {
+void executeCommand(TokenArray *tokens) {
 	if (tokens->argCount == 0)
 		return;
 	else if (isCommand(tokens, "cd")) {
@@ -46,7 +46,7 @@ void executeCommand(TokenArray *tokens, bool pipeInput, bool pipeOutput) {
 		tokenReduced->argCount = tokens->argCount - 2;
 		for (int i = 0; i < repeats; i++) {
 			TokenArray *tokenCopy = duplicateTokenArray(tokenReduced);
-			executeCommand(tokenCopy, pipeInput, pipeOutput);
+			executeCommand(tokenCopy);
 			for (int j = 0; j < tokenCopy->maxSize; j++) {
 				if (tokenCopy->args[j] != NULL) {
 					free(tokenCopy->args[j]->str);
@@ -56,9 +56,10 @@ void executeCommand(TokenArray *tokens, bool pipeInput, bool pipeOutput) {
 			free(tokenCopy);
 		}
 	} else {
-		exec(tokens, pipeInput, pipeOutput);
+		exec(tokens);
 	}
 }
+
 // Tokenize the input by the ; to execute multiple commands.
 void executeLine(TokenArray *tokens, String input) {
 	char *currentCommand;
@@ -71,9 +72,26 @@ void executeLine(TokenArray *tokens, String input) {
 		int commandCount = 0;
 		while ((subCommands[commandCount] = strtok_r(currentCommand, "|", &currentCommand)))
 			commandCount++;
-		// Debugging purposes
-//		printf("commandCount: %d\n", commandCount);
+
+		int oldpipefds[2];
+		int pipefds[2];
+		int originalInput = dup(0);
+		int originalOutput = dup(1);
 		for (int i = 0; i < commandCount; i++) {
+			if (pipe(pipefds) == -1) {
+				errorHandler(GENERAL_NONFATAL);
+				return;
+			}
+			if (i != 0) {
+				// Take input from previous pipe
+				dup2(oldpipefds[0], 0);
+				close(oldpipefds[0]);
+			}
+			if (i != commandCount - 1) {
+				// Give output to current pipe
+				dup2(pipefds[1], 1);
+				close(pipefds[1]);
+			}
 			tokenizeCommand(tokens, subCommands[i]);
 			String *inputFile = NULL, *outputFile = NULL;
 			int outputStyle = 0;
@@ -94,12 +112,22 @@ void executeLine(TokenArray *tokens, String input) {
 					return;
 				}
 			}
-			executeCommand(tokens, (i != 0), (i != commandCount - 1));
+			executeCommand(tokens);
 			resetOutputRedirect();
 			resetInputRedirect();
+
+			// Switch new pipe to old pipe
+			oldpipefds[0] = pipefds[0];
+			oldpipefds[1] = pipefds[1];
+
+			// Switch to stdin, stdout
+			dup2(originalInput, 0);
+			dup2(originalOutput, 1);
 		}
-		if (commandCount != 1)
-			closePipes();
+
+		// Close lone fd that is unclosed
+		close(oldpipefds[0]);
+
 	}
 	free(tempStore);
 	free(parseInput);

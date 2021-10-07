@@ -11,6 +11,5 @@
 #include "runningProcesses.h"
 #include "signalHandling.h"
 
-void closePipes();
-void exec(TokenArray *tokens, bool pipeInput, bool pipeOutput);
+void exec(TokenArray *tokens);
 #endif // VSH_EXEC_H
