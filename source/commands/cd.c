@@ -26,7 +26,7 @@ void changeDirectory(TokenArray *tokens) {
 void commandCD(TokenArray *tokens) {
 	// > 2 args aren't allowed (first arg being cd)
 	if (tokens->argCount > 2) {
-		errorHandler(INCORRECT_ARGC);
+		errorHandler(INVALID_ARGCOUNT);
 		return;
 	}
 	changeDirectory(tokens);

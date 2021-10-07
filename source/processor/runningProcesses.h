@@ -19,4 +19,5 @@ void removeProcess(pid_t pid);
 void exitShell();
 int getTotalProcesses();
 void currentProcesses(char **processNames, pid_t ids[]);
+pid_t getJob(int job_no);
 #endif // VSH_RUNNINGPROCESSES_H

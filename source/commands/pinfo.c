@@ -66,7 +66,7 @@ void commandPinfo(TokenArray *tokens) {
 	pid_t pid = getpid(); // Default if no argument is passed
 
 	if (tokens->argCount > 2) {
-		errorHandler(INCORRECT_ARGC);
+		errorHandler(INVALID_ARGCOUNT);
 		return;
 	}
 

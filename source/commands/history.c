@@ -119,7 +119,7 @@ void downArrow(String *input) {
 void commandHistory(TokenArray *tokens) {
 	// Incorrect number of arguments
 	if (tokens->argCount > 2) {
-		errorHandler(INCORRECT_ARGC);
+		errorHandler(INVALID_ARGCOUNT);
 		return;
 	}
 	if (tokens->argCount == 2) {
