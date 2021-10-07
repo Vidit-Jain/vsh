@@ -5,6 +5,5 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-void sigint_handler();
 void child_handler();
 #endif // VSH_SIGNALHANDLING_H
