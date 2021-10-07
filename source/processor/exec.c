@@ -1,9 +1,11 @@
 #include "exec.h"
+
 // Checks tokens to see if process is to be run in background
 int isBackgroundProcess(TokenArray *tokens) {
 	String *lastToken = tokens->args[tokens->argCount - 1];
 	return lastToken->str[lastToken->length - 1] == '&';
 }
+
 // Executes set of tokens received using execvp and fork
 void exec(TokenArray *tokens) {
 	int isBackground = isBackgroundProcess(tokens);

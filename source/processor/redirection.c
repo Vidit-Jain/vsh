@@ -1,6 +1,6 @@
 #include "redirection.h"
 
-int originalInput, originalOutput;
+int originalInput = -1, originalOutput;
 
 // Sets input to file described by inputFile
 int setInputRedirect(String *inputFile) {
@@ -23,10 +23,12 @@ int setInputRedirect(String *inputFile) {
 
 // Resets input to stdin
 int resetInputRedirect() {
+	if (originalInput == -1) return 0;
 	if (dup2(originalInput, 0) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
 	}
+	originalInput = -1;
 	return 0;
 }
 
@@ -56,9 +58,11 @@ int setOutputRedirect(String *outputFile, int outputStyle) {
 
 // Sets output to stdout again
 int resetOutputRedirect() {
+	if (originalOutput == -1) return 0;
 	if (dup2(originalOutput, 1) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
 	}
+	originalOutput = -1;
 	return 0;
 }
