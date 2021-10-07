@@ -24,7 +24,7 @@ void exec(TokenArray *tokens) {
 	}
 	if (childId == 0) {
 		// Child process should terminate on SIGINT
-		signal(SIGINT, sigint_handler);
+		signal(SIGINT, SIG_DFL);
 		char *args[tokens->argCount + 1];
 		for (int i = 0; i < tokens->argCount; i++) {
 			args[i] = tokens->args[i]->str;
