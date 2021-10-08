@@ -27,11 +27,11 @@ void exec(TokenArray *tokens) {
 	if (childId == 0) {
 		// Child process should terminate on SIGINT
 		signal(SIGINT, SIG_DFL);
+		signal(SIGTSTP, SIG_DFL);
 		char *args[tokens->argCount + 1];
 		for (int i = 0; i < tokens->argCount; i++) {
 			args[i] = tokens->args[i]->str;
 		}
-		if (!isBackground) signal(SIGTSTP, SIG_DFL);
 		setpgid(0, 0);
 		args[tokens->argCount] = NULL;
 		execvp(tokens->args[0]->str, args);

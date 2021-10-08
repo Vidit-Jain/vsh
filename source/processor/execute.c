@@ -46,12 +46,6 @@ void executeCommand(TokenArray *tokens) {
 		for (int i = 0; i < repeats; i++) {
 			TokenArray *tokenCopy = duplicateTokenArray(tokenReduced);
 			executeCommand(tokenCopy);
-			for (int j = 0; j < tokenCopy->maxSize; j++) {
-				if (tokenCopy->args[j] != NULL) {
-					free(tokenCopy->args[j]->str);
-					free(tokenCopy->args[j]);
-				}
-			}
 			free(tokenCopy);
 		}
 	} else if (isCommand(tokens, "replay")) {
