@@ -11,6 +11,7 @@
 #include "../commands/pwd.h"
 #include "../commands/repeat.h"
 #include "../commands/sig.h"
+#include "../commands/replay.h"
 #include "../utils/tokenArray.h"
 #include "exec.h"
 #include "parsing.h"

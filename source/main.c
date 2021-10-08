@@ -6,6 +6,7 @@
 #include "utils/utils.h"
 #include <ctype.h>
 int main() {
+	signal(SIGTSTP, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGCHLD, child_handler);
 	initInfo();

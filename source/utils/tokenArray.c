@@ -8,6 +8,7 @@ TokenArray *newTokenArray() {
 		errorHandler(BAD_MALLOC);
 
 	tokens->args = (String **)malloc(MAX_ARGS * sizeof(String *));
+	tokens->argCount = 0;
 	if (tokens->args == NULL)
 		errorHandler(BAD_MALLOC);
 	tokens->maxSize = MAX_ARGS;
@@ -23,6 +24,7 @@ TokenArray *newTokenArrayCustom(unsigned int size) {
 	if (size == 0)
 		errorHandler(INVALID_SIZE);
 	tokens->args = (String **)malloc(size * sizeof(String *));
+	tokens->argCount = 0;
 	if (tokens->args == NULL)
 		errorHandler(BAD_MALLOC);
 	tokens->maxSize = size;

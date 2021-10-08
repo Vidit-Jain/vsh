@@ -3,7 +3,6 @@
 unsigned int isCommand(TokenArray *tokens, char *str) {
 	return strcmp(tokens->args[0]->str, str) == 0;
 }
-
 // Checks the first command and executes the appropriate command
 void executeCommand(TokenArray *tokens) {
 	if (tokens->argCount == 0)
@@ -55,7 +54,31 @@ void executeCommand(TokenArray *tokens) {
 			}
 			free(tokenCopy);
 		}
-	} else {
+	} else if (isCommand(tokens, "replay")) {
+		int error = 0, period = -1, interval = -1;
+		TokenArray *repeatCommand = commandReplay(tokens, &interval, &period, &error);
+		if (error) {
+			fprintf(stderr, "\033[0;31m");
+			fprintf(stderr, "Invalid usage of repeat command\n");
+			fprintf(stderr, "\033[0m");
+			return;
+		}
+		time_t start = time(NULL);
+		while (1) {
+			time_t curr = time(NULL);
+			// If not enough time to execute once more, just sleep for time left
+			if (period - curr + start < interval) {
+				sleep(period - curr + start);
+				break;
+			}
+			// Sleep for interval specified
+			sleep(interval);
+			// Take a copy of the command to be executed
+			TokenArray *tokenPass = duplicateTokenArray(repeatCommand);
+			executeCommand(tokenPass);
+		}
+	}
+	else {
 		exec(tokens);
 	}
 }

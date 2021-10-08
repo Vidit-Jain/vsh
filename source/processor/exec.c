@@ -31,6 +31,7 @@ void exec(TokenArray *tokens) {
 		for (int i = 0; i < tokens->argCount; i++) {
 			args[i] = tokens->args[i]->str;
 		}
+		if (!isBackground) signal(SIGTSTP, SIG_DFL);
 		setpgid(0, 0);
 		args[tokens->argCount] = NULL;
 		execvp(tokens->args[0]->str, args);
@@ -44,7 +45,7 @@ void exec(TokenArray *tokens) {
 
 			int status;
 			wait(&status);
-			waitpid(childId, &status, WUNTRACED);
+			waitpid(childId, &status, WUNTRACED | WCONTINUED);
 
 			tcsetpgrp(STDIN_FILENO, getpgrp());
 			signal(SIGTTOU, SIG_DFL);
