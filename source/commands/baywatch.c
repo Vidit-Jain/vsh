@@ -1,8 +1,71 @@
 #include "baywatch.h"
+
+int totalTokens() {
+	FILE *fp = fopen("/proc/interrupts", "rb");
+	if (fp == NULL) {
+		printf("Error\n");
+	}
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+
+	read = getline(&line, &len, fp);
+	if (read == -1) {
+		fprintf(stderr, "Error\n");
+		return -1;
+	}
+	int tokenCount = 0;
+	while ((strtok_r(line, " \t\n", &line)))
+		tokenCount++;
+	fclose(fp);
+	return tokenCount;
+}
+void printCpuHead() {
+	int cpuCount = totalTokens();
+	// Printing the first row of CPU names
+	for (int i = 0; i < cpuCount; i++) {
+		printf("CPU%d\t", i);
+	}
+	printf("\n");
+}
+void interrupt() {
+	FILE *fp = fopen("/proc/interrupts", "rb");
+	if (fp == NULL) {
+		printf("Error\n");
+		return;
+	}
+
+	int cpuCount = totalTokens();
+
+	int bufferSize = 256;
+	char buffer[bufferSize];
+
+	while (fgets(buffer, bufferSize, fp)) {
+		char *line = (char *)malloc(256 * sizeof(char));
+		strcpy(line, buffer);
+		char *token;
+
+		token = strtok_r(line, " \t\n", &line);
+		if (token == NULL)
+			continue;
+		// If line starts with 1:, then it's the line we want
+		if (strcmp(token, "1:") != 0)
+			continue;
+
+		// If we reach here, it means we need to print the interrupt values
+		for (int i = 0; i < cpuCount; i++) {
+			token = strtok_r(line, " \t\n", &line);
+			printf("%s\t", token);
+		}
+		printf("\n");
+	}
+	fclose(fp);
+}
 void newborn() {
 	FILE *fp = fopen("/proc/loadavg", "rb");
 	if (fp == NULL) {
 		printf("Error\n");
+		return;
 	}
 	String *state = newString();
 	String *buffer = newString();
@@ -105,13 +168,19 @@ void commandBaywatch(TokenArray *tokens) {
 	time_t prev = time(NULL);
 	enableRawMode();
 	setbuf(stdin, NULL);
-	while (!keyPressed()) {
+
+	if (command_id == 1)
+		printCpuHead();
+
+	while (!(keyPressed() && getchar() == 'q')) {
 		time_t curr = time(NULL);
 		// If sufficient time has past, then execute command
 		if (curr - prev >= duration) {
-			if (command_id == 2)
+			if (command_id == 1)
+				interrupt();
+			else if (command_id == 2)
 				newborn();
-			else if (command_id == 3)
+			else
 				dirty();
 			prev = curr;
 		}
