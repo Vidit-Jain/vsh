@@ -12,6 +12,9 @@ TokenArray *newTokenArray() {
 	if (tokens->args == NULL)
 		errorHandler(BAD_MALLOC);
 	tokens->maxSize = MAX_ARGS;
+	for (int i = 0; i < tokens->maxSize; i++) {
+		tokens->args[i] = NULL;
+	}
 	return tokens;
 }
 
@@ -28,6 +31,9 @@ TokenArray *newTokenArrayCustom(unsigned int size) {
 	if (tokens->args == NULL)
 		errorHandler(BAD_MALLOC);
 	tokens->maxSize = size;
+	for (int i = 0; i < tokens->maxSize; i++) {
+		tokens->args[i] = NULL;
+	}
 	return tokens;
 }
 // Copy one token array and create a new copy

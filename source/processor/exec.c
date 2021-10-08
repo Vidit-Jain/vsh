@@ -38,22 +38,27 @@ void exec(TokenArray *tokens) {
 		errorHandler(GENERAL_NONFATAL);
 		exit(0);
 	} else {
+		// Add child process to linked list of currently running processes
+		addProcess(tokens->args[0]->str, childId);
 		if (!isBackground) { // Wait if not background process
 			signal(SIGTTOU, SIG_IGN);
 			signal(SIGTTIN, SIG_IGN);
 			tcsetpgrp(STDIN_FILENO, childId);
 
 			int status;
-			wait(&status);
-			waitpid(childId, &status, WUNTRACED | WCONTINUED);
+			waitpid(childId, &status, WUNTRACED );
+
+			/* If the process wasn't stopped, then
+			 * remove it from the list of running process
+			 */
+			if (!WIFSTOPPED(status))
+				removeProcess(childId);
 
 			tcsetpgrp(STDIN_FILENO, getpgrp());
 			signal(SIGTTOU, SIG_DFL);
 			signal(SIGTTIN, SIG_DFL);
 		} else {
 			printf("%d\n", childId);
-			// Add child process to linked list of currently running processes
-			addProcess(tokens->args[0]->str, childId);
 		}
 	}
 }
