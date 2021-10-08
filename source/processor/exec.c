@@ -46,7 +46,7 @@ void exec(TokenArray *tokens) {
 			tcsetpgrp(STDIN_FILENO, childId);
 
 			int status;
-			waitpid(childId, &status, WUNTRACED );
+			waitpid(childId, &status, WUNTRACED);
 
 			/* If the process wasn't stopped, then
 			 * remove it from the list of running process

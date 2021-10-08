@@ -23,7 +23,8 @@ int setInputRedirect(String *inputFile) {
 
 // Resets input to stdin
 int resetInputRedirect() {
-	if (originalInput == -1) return 0;
+	if (originalInput == -1)
+		return 0;
 	if (dup2(originalInput, 0) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
@@ -58,7 +59,8 @@ int setOutputRedirect(String *outputFile, int outputStyle) {
 
 // Sets output to stdout again
 int resetOutputRedirect() {
-	if (originalOutput == -1) return 0;
+	if (originalOutput == -1)
+		return 0;
 	if (dup2(originalOutput, 1) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;

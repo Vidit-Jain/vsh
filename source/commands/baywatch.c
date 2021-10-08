@@ -13,7 +13,6 @@ void newborn() {
 	updateLength(state);
 	fclose(fp);
 	printf("%s\n", state->str);
-
 }
 void dirty() {
 	FILE *fp = fopen("/proc/meminfo", "rb");
@@ -30,9 +29,8 @@ void dirty() {
 	updateLength(state);
 	fclose(fp);
 	printf("%s kb\n", state->str);
-
 }
-int checkFlagsBaywatch(TokenArray *tokens, char** command) {
+int checkFlagsBaywatch(TokenArray *tokens, char **command) {
 	char *args[tokens->argCount];
 	for (int i = 0; i < tokens->argCount; i++) {
 		args[i] = tokens->args[i]->str;
@@ -42,9 +40,7 @@ int checkFlagsBaywatch(TokenArray *tokens, char** command) {
 	int opt;
 	while ((opt = getopt((int)tokens->argCount, args, ":n:")) != -1) {
 		switch (opt) {
-		case 'n':
-			durationString = optarg;
-			break;
+		case 'n': durationString = optarg; break;
 		case ':':
 			fprintf(stderr, "\033[0;31m");
 			fprintf(stderr, "Argument not passed\n");
@@ -60,7 +56,8 @@ int checkFlagsBaywatch(TokenArray *tokens, char** command) {
 		if (duration == -1)
 			break;
 	}
-	if (duration == -1) return duration;
+	if (duration == -1)
+		return duration;
 	if (durationString == NULL) {
 		fprintf(stderr, "\033[0;31m");
 		fprintf(stderr, "Duration not specified\n");
@@ -92,7 +89,8 @@ void commandBaywatch(TokenArray *tokens) {
 	int command_id = -1;
 	int duration = checkFlagsBaywatch(tokens, &command);
 
-	if (duration == -1) return;
+	if (duration == -1)
+		return;
 	if (strcmp(command, "interrupt") == 0) {
 		command_id = 1;
 	} else if (strcmp(command, "newborn") == 0) {
@@ -111,8 +109,10 @@ void commandBaywatch(TokenArray *tokens) {
 		time_t curr = time(NULL);
 		// If sufficient time has past, then execute command
 		if (curr - prev >= duration) {
-			if (command_id == 2) newborn();
-			else if (command_id == 3) dirty();
+			if (command_id == 2)
+				newborn();
+			else if (command_id == 3)
+				dirty();
 			prev = curr;
 		}
 	}

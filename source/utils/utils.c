@@ -103,3 +103,8 @@ String *getState(pid_t pid) {
 	updateLength(state);
 	return state;
 }
+int keyPressed() {
+	int bytesWaiting;
+	ioctl(STDIN_FILENO, FIONREAD, &bytesWaiting);
+	return bytesWaiting;
+}

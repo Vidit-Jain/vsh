@@ -4,5 +4,6 @@
 
 #include "../utils/tokenArray.h"
 #include "../utils/utils.h"
-TokenArray *commandReplay(TokenArray *tokens, int *interval, int* period, int *error);
+TokenArray *commandReplay(TokenArray *tokens, int *interval, int *period,
+						  int *error);
 #endif // VSH_REPLAY_H

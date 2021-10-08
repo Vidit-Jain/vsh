@@ -27,6 +27,8 @@ void executeCommand(TokenArray *tokens) {
 		commandBg(tokens);
 	} else if (isCommand(tokens, "fg")) {
 		commandFg(tokens);
+	} else if (isCommand(tokens, "baywatch")) {
+		commandBaywatch(tokens);
 	} else if (isCommand(tokens, "exit")) {
 		exitShell();
 	} else if (isCommand(tokens, "repeat")) {
@@ -50,7 +52,8 @@ void executeCommand(TokenArray *tokens) {
 		}
 	} else if (isCommand(tokens, "replay")) {
 		int error = 0, period = -1, interval = -1;
-		TokenArray *repeatCommand = commandReplay(tokens, &interval, &period, &error);
+		TokenArray *repeatCommand =
+			commandReplay(tokens, &interval, &period, &error);
 		if (error) {
 			fprintf(stderr, "\033[0;31m");
 			fprintf(stderr, "Invalid usage of repeat command\n");
@@ -71,8 +74,7 @@ void executeCommand(TokenArray *tokens) {
 			TokenArray *tokenPass = duplicateTokenArray(repeatCommand);
 			executeCommand(tokenPass);
 		}
-	}
-	else {
+	} else {
 		exec(tokens);
 	}
 }
@@ -85,9 +87,10 @@ void executeLine(TokenArray *tokens, String input) {
 	while (
 		(currentCommand = strtok_r(parseInput->str, ";", &parseInput->str))) {
 
-		char* subCommands[20];
+		char *subCommands[20];
 		int commandCount = 0;
-		while ((subCommands[commandCount] = strtok_r(currentCommand, "|", &currentCommand)))
+		while ((subCommands[commandCount] =
+					strtok_r(currentCommand, "|", &currentCommand)))
 			commandCount++;
 
 		int oldpipefds[2];
@@ -112,8 +115,8 @@ void executeLine(TokenArray *tokens, String input) {
 			tokenizeCommand(tokens, subCommands[i]);
 			String *inputFile = NULL, *outputFile = NULL;
 			int outputStyle = 0;
-			if (parseRedirection(tokens, &inputFile, &outputFile, &outputStyle) <
-				0) {
+			if (parseRedirection(tokens, &inputFile, &outputFile,
+								 &outputStyle) < 0) {
 				fprintf(stderr, "\033[0;31m");
 				fprintf(stderr, "Error while parsing command\n");
 				fprintf(stderr, "\033[0m");
@@ -144,7 +147,6 @@ void executeLine(TokenArray *tokens, String input) {
 
 		// Close lone fd that is unclosed
 		close(oldpipefds[0]);
-
 	}
 	free(tempStore);
 	free(parseInput);

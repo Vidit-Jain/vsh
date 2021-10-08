@@ -1,5 +1,6 @@
 #include "replay.h"
-TokenArray *commandReplay(TokenArray* tokens, int *interval, int *period, int *error) {
+TokenArray *commandReplay(TokenArray *tokens, int *interval, int *period,
+						  int *error) {
 
 	TokenArray *repeatCommand = newTokenArray();
 	int isCommandArgs = 0;
@@ -16,7 +17,8 @@ TokenArray *commandReplay(TokenArray* tokens, int *interval, int *period, int *e
 			}
 			if (strcmp(tokens->args[i]->str, "-interval") == 0) {
 				// Indicates end of command
-				if (isCommandArgs) isCommandArgs = 0;
+				if (isCommandArgs)
+					isCommandArgs = 0;
 				// interval != -1 indicates interval was called before
 				if (i == tokens->argCount - 1 || *interval != -1) {
 					*error = 1;
@@ -31,7 +33,8 @@ TokenArray *commandReplay(TokenArray* tokens, int *interval, int *period, int *e
 			}
 			if (strcmp(tokens->args[i]->str, "-period") == 0) {
 				// Indicates end of command
-				if (isCommandArgs) isCommandArgs = 0;
+				if (isCommandArgs)
+					isCommandArgs = 0;
 				// period != -1 indicates period was called before
 				if (i == tokens->argCount - 1 || *period != -1) {
 					*error = 1;
@@ -45,18 +48,16 @@ TokenArray *commandReplay(TokenArray* tokens, int *interval, int *period, int *e
 				i++;
 			}
 
-		}
-		else if (isCommandArgs){
+		} else if (isCommandArgs) {
 			// Add token to tokens of command
-			repeatCommand->args[repeatCommand->argCount] = initString(tokens->args[i]->str);
+			repeatCommand->args[repeatCommand->argCount] =
+				initString(tokens->args[i]->str);
 			repeatCommand->argCount++;
-		}
-		else {
+		} else {
 			// Extra argument, throw an error
 			*error = 1;
 			break;
 		}
-
 	}
 	if (repeatCommand->argCount == 0) {
 		*error = 1;
