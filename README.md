@@ -1,9 +1,9 @@
 # vsh
 A basic shell implemented in C
 # Usage
-run `make`
+1. run `make`
 
-and execute `./vsh`
+2. execute `./vsh`
 
 ## Assumptions
 1. The length of each command is at max 255 characters
@@ -167,6 +167,16 @@ You can use this command to check all the currently running background processes
 ```<abc@def:~> jobs <flags>```
 
 This will display the status of each job from the list of jobs specified by flags, and the number assigned to them by the shell  
+
+**Output Example:**
+
+```
+[2] Running gedit [50386]
+[1] Stopped zathura [50370]
+```
+The jobs are listed alphabetically by the command name. The numbering given to the jobs of the shell are given
+in order of their creation, and are dynamic, i.e Say we have 5 processes 1,2,3,4,5. If process 3 ends, the jobs
+with id 4, 5 will be shifted to 3,4. If a job is created later, it will be given the id 5.
 
 ## sig
 You can use the command to send a signal to a job
