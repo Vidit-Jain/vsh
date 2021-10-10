@@ -79,8 +79,7 @@ void executeCommand(TokenArray *tokens) {
 	}
 }
 
-// Tokenize the input by the ; to execute multiple commands.
-void executeLine(TokenArray *tokens, String input) {
+void execute(TokenArray *tokens, String input, int originalInput, int originalOutput) {
 	char *currentCommand;
 	String *parseInput = initString(input.str);
 	char *tempStore = parseInput->str;
@@ -95,8 +94,6 @@ void executeLine(TokenArray *tokens, String input) {
 
 		int oldpipefds[2];
 		int pipefds[2];
-		int originalInput = dup(0);
-		int originalOutput = dup(1);
 		for (int i = 0; i < commandCount; i++) {
 			if (pipe(pipefds) == -1) {
 				errorHandler(GENERAL_NONFATAL);
@@ -154,4 +151,15 @@ void executeLine(TokenArray *tokens, String input) {
 	}
 	free(tempStore);
 	free(parseInput);
+}
+
+// Tokenize the input by the ; to execute multiple commands.
+void executeLine(TokenArray *tokens, String input) {
+	int originalInput = dup(0);
+	int originalOutput = dup(1);
+
+	execute(tokens, input, originalInput, originalOutput);
+
+	dup2(originalInput, 0);
+	dup2(originalOutput, 1);
 }
