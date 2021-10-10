@@ -1,7 +1,5 @@
 #include "redirection.h"
 
-int originalInput = -1, originalOutput;
-
 // Sets input to file described by inputFile
 int setInputRedirect(String *inputFile) {
 	int fd = open(inputFile->str, O_RDONLY);
@@ -9,7 +7,7 @@ int setInputRedirect(String *inputFile) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
 	}
-	originalInput = dup(0);
+
 	if (dup2(fd, 0) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
@@ -21,17 +19,6 @@ int setInputRedirect(String *inputFile) {
 	return 0;
 }
 
-// Resets input to stdin
-int resetInputRedirect() {
-	if (originalInput == -1)
-		return 0;
-	if (dup2(originalInput, 0) < 0) {
-		errorHandler(GENERAL_NONFATAL);
-		return -1;
-	}
-	originalInput = -1;
-	return 0;
-}
 
 /* Sets output to file described by outputFile, overwrites or appends based
  * on the value of outputStyle, 0 - Overwrite, 1 - Append
@@ -46,7 +33,7 @@ int setOutputRedirect(String *outputFile, int outputStyle) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
 	}
-	originalOutput = dup(1);
+
 	if (dup2(fd, 1) < 0) {
 		errorHandler(GENERAL_NONFATAL);
 		return -1;
@@ -54,17 +41,5 @@ int setOutputRedirect(String *outputFile, int outputStyle) {
 	if (close(fd) < 0) {
 		return -1;
 	}
-	return 0;
-}
-
-// Sets output to stdout again
-int resetOutputRedirect() {
-	if (originalOutput == -1)
-		return 0;
-	if (dup2(originalOutput, 1) < 0) {
-		errorHandler(GENERAL_NONFATAL);
-		return -1;
-	}
-	originalOutput = -1;
 	return 0;
 }

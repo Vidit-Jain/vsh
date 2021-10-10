@@ -105,12 +105,18 @@ void executeLine(TokenArray *tokens, String input) {
 			if (i != 0) {
 				// Take input from previous pipe
 				dup2(oldpipefds[0], 0);
-				close(oldpipefds[0]);
+				if (close(oldpipefds[0]) < 0) {
+					errorHandler(GENERAL_NONFATAL);
+					return;
+				}
 			}
 			if (i != commandCount - 1) {
 				// Give output to current pipe
 				dup2(pipefds[1], 1);
-				close(pipefds[1]);
+				if(close(pipefds[1]) < 0) {
+					errorHandler(GENERAL_NONFATAL);
+					return;
+				}
 			}
 			tokenizeCommand(tokens, subCommands[i]);
 			String *inputFile = NULL, *outputFile = NULL;
@@ -133,8 +139,6 @@ void executeLine(TokenArray *tokens, String input) {
 				}
 			}
 			executeCommand(tokens);
-			resetOutputRedirect();
-			resetInputRedirect();
 
 			// Switch new pipe to old pipe
 			oldpipefds[0] = pipefds[0];
