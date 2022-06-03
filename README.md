@@ -1,4 +1,5 @@
 # vsh
+![Terminal Text](terminal.png)
 A unix shell implemented in C that supports many features, such as
  - Executing multiple shell commands in one line
  - Running background processes,
