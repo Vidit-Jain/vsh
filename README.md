@@ -1,5 +1,13 @@
 # vsh
-A basic shell implemented in C
+A unix shell implemented in C that supports many features, such as
+ - Executing multiple shell commands in one line
+ - Running background processes,
+ - Piping support
+ - I/O redirection
+ - Signal handling to appropriately handle actions
+ - Monitoring processes with customly made `pinfo` command
+ - Custom commands to monitor statistics of the system like the amount of keyboard interrupts or dirty memory currently.
+
 # Usage
 1. run `make`
 
